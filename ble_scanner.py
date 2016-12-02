@@ -37,7 +37,7 @@ class BleScanner:
         fields = beacon.split(",")
         mac = fields[0]
 
-        #print 'mac: ', mac
+        #print ('ble, mac: ', mac)
           
         if mac in supermetric_beacons:
           time_sec = time.time()
