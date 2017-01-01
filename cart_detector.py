@@ -14,8 +14,9 @@ from threading import Timer
 def scan(log_file):
   logger = utils.Logger()
   logger.open(log_file = log_file, log_to_file = True, log_to_mqtt = False,
-      log_to_stdout = True)
-
+      log_to_stdout = False)
+  monitor = utils.Monitor()
+  
   gps_scanner_inst = gps_scanner.GpsScanner()
   ble_scanner_inst = ble_scanner.BleScanner()
   # sensehat_scanner_inst = sensehat_scanner.SensehatScanner()
@@ -23,11 +24,10 @@ def scan(log_file):
   
   gps_scanner_inst.open()
   gps_scanner_inst.start(logger)
-  ble_scanner_inst.start(logger)
-  # sensehat_scanner_inst.start(logger)
-  wheel_scanner_inst.start(logger)
+  ble_scanner_inst.start(logger, monitor)
+  wheel_scanner_inst.start(logger, monitor)
 
-  time.sleep(600)
+  time.sleep(1800)
   
   wheel_scanner_inst.stop()
   # sensehat_scanner_inst.stop()
