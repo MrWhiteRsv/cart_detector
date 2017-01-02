@@ -64,7 +64,8 @@ class Monitor():
 class Logger():
 
   log_file = None
-  hall_file = None
+  hall_file_0 = None
+  hall_file_1 = None
   do_log_to_file = None
   do_log_to_mqtt = None
   do_log_to_stdout = None
@@ -72,7 +73,8 @@ class Logger():
   def open(self, log_file = 'logfile.dat', log_to_file = False, log_to_mqtt = False,
       log_to_stdout = True):
     self.log_file = open(log_file, 'w')
-    self.hall_file = open('hall.txt', 'w')
+    self.hall_file_0 = open('hall_0.txt', 'w')
+    self.hall_file_1 = open('hall_1.txt', 'w')
     self.do_log_to_file = log_to_file
     self.do_log_to_mqtt = log_to_mqtt
     self.do_log_to_stdout = log_to_stdout
@@ -93,8 +95,6 @@ class Logger():
     self.log_event(topic, key_val)
             
   def log_ble_raw(self, mac, time_sec, rssi):
-
-    
     key_val = dict(mac = mac, time_sec = time_sec, rssi = rssi)
     topic = "cart/cartId/raw_ble"
     self.log_event(topic, key_val, bypass_mqtt = True)
@@ -117,12 +117,13 @@ class Logger():
     topic = "cart/cartId/revolution"
     self.log_event(topic, key_val)
     
-  def log_hall_reading(self, start_time, value, reading_counter):
-    key_val = dict(start_time = start_time, value = value,
+  def log_hall_reading(self, start_time, val_0, val_1, reading_counter):
+    key_val = dict(start_time = start_time, val_0 = val_0,
         reading_counter = reading_counter)
     topic = "cart/cartId/hall_reading"
     self.log_event(topic, key_val, bypass_mqtt = True)
-    self.hall_file.write(str(reading_counter) + ', ' + str(value) + '\n')
+    self.hall_file_0.write(str(reading_counter) + ', ' + str(val_0) + '\n')
+    self.hall_file_1.write(str(reading_counter) + ', ' + str(val_1) + '\n')
     
   def log_event(self, topic, key_val, bypass_mqtt = False):
     if not bypass_mqtt:
