@@ -118,7 +118,7 @@ class Logger():
     self.log_event(topic, key_val)
     
   def log_hall_reading(self, start_time, val_0, val_1, reading_counter):
-    key_val = dict(start_time = start_time, val_0 = val_0,
+    key_val = dict(start_time = start_time, val_0 = val_0, val_1 = val_1,
         reading_counter = reading_counter)
     topic = "cart/cartId/hall_reading"
     self.log_event(topic, key_val, bypass_mqtt = True)
