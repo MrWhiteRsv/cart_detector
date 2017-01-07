@@ -20,6 +20,7 @@ class HallSensorTrainerTest():
           continue
         if (parsed['topic'] == 'cart/cartId/hall_reading'):
           trainer.add_sample(parsed['val_0'])
+          #trainer.add_sample(3)
       input_file.close()
       
     except Exception as inst:
