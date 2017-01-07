@@ -28,15 +28,4 @@ class Histogram():
     return res
   
 
-  
-    """ --- Implementation functions ---"""
-    
-    """bins = [500, 700, 800, 900, 1000, 1500, 1800, 2000, 2200]
-bin_count = len(bins) - 1
-sample_counts = [0] * bin_count
-for x in X:
-  for i in range(bin_count):
-    if (bins[i] <= x) and (x < bins[i + 1]):
-      sample_counts[i] += 1"""
-
    

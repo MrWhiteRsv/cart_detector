@@ -22,6 +22,7 @@ class HallSensorTrainerTest():
           trainer.add_sample(parsed['val_0'])
           #trainer.add_sample(3)
       input_file.close()
+      print (trainer.to_string())
       
     except Exception as inst:
       print (inst)
