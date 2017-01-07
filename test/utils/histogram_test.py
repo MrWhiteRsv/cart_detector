@@ -12,6 +12,10 @@ class HistogramTest():
     res = self.test_add_sample()
     ovreall_res = ovreall_res and res
     print ('HistogramTest.test_add_sample: ' , 'pass' if res else 'fail')
+
+    res = self.test_remove_sample()
+    ovreall_res = ovreall_res and res
+    print ('HistogramTest.test_remove_sample: ' , 'pass' if res else 'fail')
     
     return ovreall_res
 
@@ -48,6 +52,19 @@ class HistogramTest():
     if (len(hist.get_sample_counts()) != 20):
       return False
     return True
+    
+  def test_remove_sample(self):
+    hist = histogram.Histogram(num_bins = 20, min_val = 0, max_val = 5)
+    if (hist.get_sample_counts()[0] != 0):
+      return False
+    hist.add_sample(0.1)
+    if (hist.get_sample_counts()[0] != 1):
+      return False
+    hist.remove_sample(0.2)
+    if (hist.get_sample_counts()[0] != 0):
+      return False
+    return True   
+    
     
 
     
