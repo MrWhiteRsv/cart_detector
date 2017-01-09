@@ -1,5 +1,6 @@
 import sys
 
+from test.wheel_scanner import activity_threshold_calculator_test
 from test.wheel_scanner import hall_sensor_trainer_test
 from test.wheel_scanner import ssd_calculator_test
 
@@ -8,6 +9,11 @@ from test.utils import utils_test
 
 def main(argv):
 
+  print ('________ Activity Threshold Calculator Test ________\n')
+  res = activity_threshold_calculator_test.test()
+  print ('res:', 'pass' if res else 'fail')
+  print('\n')
+  
   print ('________ SSD Calculator Test ________\n')
   res = ssd_calculator_test.test()
   print ('res:', 'pass' if res else 'fail')
