@@ -3,12 +3,24 @@ import sys
 from test.wheel_scanner import activity_threshold_calculator_test
 from test.wheel_scanner import hall_sensor_trainer_test
 from test.wheel_scanner import ssd_calculator_test
+from test.wheel_scanner import turn_threshold_evaluator_test
+from test.wheel_scanner import turn_threshold_optimizer_test
 
 from test.utils import histogram_test
 from test.utils import utils_test
 
 def main(argv):
+  """print ('________ Turn Threshold Evaluator Test ________\n')
+  res = turn_threshold_evaluator_test.test()
+  print ('res:', 'pass' if res else 'fail')
+  print('\n') """
+  
+  print ('________ Turn Threshold Optimizer Test ________\n')
+  res = turn_threshold_optimizer_test.test()
+  print ('res:', 'pass' if res else 'fail')
+  print('\n')
 
+  """
   print ('________ Activity Threshold Calculator Test ________\n')
   res = activity_threshold_calculator_test.test()
   print ('res:', 'pass' if res else 'fail')
@@ -19,7 +31,7 @@ def main(argv):
   print ('res:', 'pass' if res else 'fail')
   print('\n')
   
-  """ print ('________ Utils Test ________\n')
+  print ('________ Utils Test ________\n')
   res = utils_test.test()
   print ('res:', 'pass' if res else 'fail')
   print('\n')
@@ -32,8 +44,7 @@ def main(argv):
   print ('________ Hall Sensor Trainer Test ________\n')
   res = hall_sensor_trainer_test.HallSensorTrainerTest().test()
   print ('res:', 'pass' if res else 'fail')
-  print('\n')
-  """
+  print('\n') """
 
 if __name__ == '__main__':
   main(sys.argv[1:])

@@ -23,3 +23,35 @@ def get_longest_run_indices(lst, val):
       max_end_index = i
       max_start_index = i - current_run_length + 1
   return {'start_index' : max_start_index,  'end_index' : max_end_index}
+  
+def first_different_index(lst, val):
+  """ Finds the index of the first item in lst that has value different then val.
+    
+  Args:
+    lst: list of values.
+    val: the checked value
+  
+  Returns:
+    index of item. None if no such item exists.
+  """
+  for index, number in enumerate(lst):
+    if number != val:  
+      return index
+  return None
+    
+def last_different_index(lst, val):
+  """ Finds the index of the last item in lst that has value different then val.
+    
+  Args:
+    lst: list of values.
+    val: the checked value
+  
+  Returns:
+    index of item. None if no such item exists.
+  """
+  
+  for index, number in enumerate(reversed(lst)):
+    if number != val: # or 'if number:'
+      return len(lst) - index - 1
+  return None
+
