@@ -3,33 +3,42 @@
 import random
 
 from operator import add
+
+from src.wheel_scanner import turn_threshold_evaluator
 from src.wheel_scanner import turn_threshold_optimizer
 
-
 def test():
+
+  # Simple example.
   signal = [0] * 100 + [1, 0] * 100
-  res = turn_threshold_optimizer.optimize_thresholds(signal)
-  if (res['bottom_threshold'] < 0.0 or res['bottom_threshold'] > 0.4):
+  if not evaluate_signal(signal, expected_result = 200):
     return False
-  if (res['top_threshold'] < 0.6 or res['top_threshold'] > 1.1):
-    return False  
-  
-  # shifted signal
-  signal = [0] * 100 + [2, 1] * 100
-  res = turn_threshold_optimizer.optimize_thresholds(signal)
-  if (res['bottom_threshold'] < 0.9 or res['bottom_threshold'] > 1.4):
+  # inactive + active.
+  signal = [0] * 100 + [1, 0] * 100
+  if not evaluate_signal(signal, expected_result = 200):
     return False
-  if (res['top_threshold'] < 1.6 or res['top_threshold'] > 2.1):
+  # shifted.
+  signal = [0] * 100 + [4, 3] * 100
+  if not evaluate_signal(signal, expected_result = 200):
     return False
-  
-  # scaled signal
+  # scaled.
+  signal = [0] * 100 + [4, 2] * 100
+  if not evaluate_signal(signal, expected_result = 200):
+    return False
+  # inactive + active + noise.
   signal = [0] * 100 + [1, 0] * 100
   noise = [0.2 * random.random() for i in xrange(len(signal))]
   noisy_signal = map(add, signal, noise)
-  res = turn_threshold_optimizer.optimize_thresholds(noisy_signal)
-  if (res['bottom_threshold'] < 0.0 or res['bottom_threshold'] > 0.5):
+  if not evaluate_signal(noisy_signal, expected_result = 200):
     return False
-  if (res['top_threshold'] < 0.7 or res['top_threshold'] > 1.2):
-    return False
-
+    
   return True
+
+""" logic """
+
+def evaluate_signal(signal, expected_result):
+  thresholds = turn_threshold_optimizer.optimize_thresholds(signal)
+  evaluation = turn_threshold_evaluator.evaluate_thrsholds(
+      signal_lst = signal, bottom_threshold = thresholds['bottom_threshold'],
+      top_threshold =thresholds['top_threshold'] , min_level_samples = 1)
+  return (evaluation['overall_shifts'] == expected_result)
