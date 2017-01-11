@@ -28,7 +28,8 @@ class HallSensorTrainer():
     self.local_ssd_buffer = collections.deque(maxlen = self.LOCAL_SSD_BUFFER_SIZE)
     self.global_ssd_buffer = collections.deque(maxlen = self.GLOBAL_SSD_BUFFER_SIZE)
     self.logger = logger.Logger()
-    self.logger.open(mqtt_log_file_name = None, log_to_mqtt_file = True,
+          
+    self.logger.open(run_name = None, log_to_mqtt_file = False,
         log_to_mqtt = False, log_to_stdout = False)
     self.sample_index = 0
 

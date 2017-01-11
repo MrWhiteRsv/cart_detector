@@ -6,14 +6,17 @@ import gps_scanner
 import sensehat_scanner
 import sys
 import time
+
 import utils
+
 import wheel_scanner
 
 from threading import Timer
+import src.utils.logger
 
 def scan(log_file):
-  logger = utils.Logger()
-  logger.open(log_file = log_file, log_to_file = True, log_to_mqtt = False,
+  logger = src.utils.logger.Logger()
+  logger.open(run_name = log_file, log_to_mqtt_file = True, log_to_mqtt = False,
       log_to_stdout = False)
   monitor = utils.Monitor()
   

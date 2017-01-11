@@ -38,24 +38,38 @@ def test():
   if not evaluate_signal(noisy_signal, 200, 200):
     return False
 
-  # signal #1  
+  # signal BM_0 sensor 0
   signal = src.utils.utils.get_signal_from_file('benchmark_0.dat', 'val_0')
   if (not signal):
     return False
   if not evaluate_signal(signal, 80, 90):
     return False
 
-  # signal #2  
+  # signal BM_1 sensor 1  
   signal = src.utils.utils.get_signal_from_file('benchmark_0.dat', 'val_1')
   if (not signal):
     return False
   if not evaluate_signal(signal, 80, 90): # ~90 Turns
    return False
+   
+  # signal BM_0 sensor 0 
+  """signal = src.utils.utils.get_signal_from_file('benchmark_1.dat', 'val_0')
+  if (not signal):
+    return False
+  if not evaluate_signal(signal, 150, 170):
+    return False
+  """
+     
+  # signal BM_0 sensor 2 
+  signal = src.utils.utils.get_signal_from_file('benchmark_1.dat', 'val_1')
+  if (not signal):
+    return False
+  if not evaluate_signal(signal, 150, 170):
+    return False
+   
   return True
 
 """ logic """
-
-
 
 def evaluate_signal(signal, miv_value, max_value):
   thresholds = turn_threshold_optimizer.optimize_thresholds(signal)
@@ -63,6 +77,6 @@ def evaluate_signal(signal, miv_value, max_value):
   evaluation = turn_threshold_evaluator.evaluate_thrsholds(
       signal_lst = signal, bottom_threshold = thresholds['bottom_threshold'],
       top_threshold = thresholds['top_threshold'] , min_level_samples = 1)
-  # print('evaluation:', evaluation)
+  print('evaluation:', evaluation)
   return (evaluation['overall_shifts'] >= miv_value and
       evaluation['overall_shifts'] <= max_value)

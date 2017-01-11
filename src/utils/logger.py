@@ -1,4 +1,8 @@
 import os
+import json
+
+import json
+import paho.mqtt.publish as publish
 
 class Logger():
 
@@ -67,9 +71,11 @@ class Logger():
     
   """ --- Implementation functions ---"""
    
-  def open(self, mqtt_log_file_name = 'logfile.dat', log_to_mqtt_file = False, log_to_mqtt = False,
-      log_to_stdout = True):
-    if (log_to_mqtt and mqtt_log_file_name):
+  def open(self, run_name = 'test_run', log_to_mqtt_file = False,
+      log_to_mqtt = False, log_to_stdout = True):
+      
+    if (log_to_mqtt_file and run_name):
+      mqtt_log_file_name = run_name + '.dat'
       self.mqtt_log_file = open(mqtt_log_file_name, 'w')
     self.hall0_file = open('hall_0.txt', 'w')
     self.hall1_file = open('hall_1.txt', 'w')
