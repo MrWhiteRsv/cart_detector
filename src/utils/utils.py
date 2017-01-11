@@ -1,3 +1,6 @@
+import json
+import os
+import traceback
 
 def get_longest_run_indices(lst, val):
   min_run_length = 0
@@ -49,9 +52,28 @@ def last_different_index(lst, val):
   Returns:
     index of item. None if no such item exists.
   """
-  
   for index, number in enumerate(reversed(lst)):
     if number != val: # or 'if number:'
       return len(lst) - index - 1
   return None
+
+def get_signal_from_file(file_name, val_key):
+  signal = []
+  try:
+    current_dir = os.path.dirname(__file__)
+    full_input_file_name = os.path.join(current_dir, '../../test/runs/' + file_name)
+    input_file = open(full_input_file_name, 'r')
+    for line in input_file:
+      try: 
+        parsed = json.loads(line)
+      except Exception as inst:
+        continue
+      if (parsed['topic'] == 'cart/cartId/hall_reading'):
+        signal.append(parsed[val_key])
+    input_file.close()
+    return signal
+  except Exception as inst:
+    print (inst)
+    traceback.print_exc()
+    return None
 

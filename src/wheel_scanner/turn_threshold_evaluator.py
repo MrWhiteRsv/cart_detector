@@ -35,7 +35,6 @@ def evaluate_thrsholds(signal_lst, bottom_threshold, top_threshold, min_level_sa
   for val in signal_lst:
     signal_level = compute_signal_level(val, bottom_threshold, top_threshold)
     new_state = compute_state(state, signal_level)
-    # print (val, 'signal_level:', signal_level, 'state:', state, 'new_state:', new_state)
     if (compute_did_shift(state, new_state)):
       res['overall_shifts'] = res['overall_shifts'] + 1
     state = new_state

@@ -7,7 +7,6 @@ import src.utils.utils
 from .. utils import histogram
 from .. utils import logger
 
-
 class HallSensorTrainer():
 
   LAG = 2
@@ -53,19 +52,15 @@ class HallSensorTrainer():
     trimmed_sample_count = map(
         lambda x: x if x >= min_bin_value_threshold else 0,
         ssd_histogram.get_sample_counts())
-    print(trimmed_sample_count)
     indices = src.utils.utils.get_longest_run_indices(
         lst = trimmed_sample_count, val = 0)
-    print indices
     bottom_threshold = ssd_histogram.get_bins()[indices['start_index']]
-    top_threshold = ssd_histogram.get_bins()[indices['end_index'] + 1]
-    print (0.5 * (bottom_threshold + top_threshold))
-    
-    #print('ssd_dupport: ', ssd_support)
-    print('ssd_histogram: ', ssd_histogram.to_string()) 
-    #print(sorted_sample_count)
-    #print(min_bin_value_threshold)
-    #print(trimmed_sample_count)
+    top_threshold = ssd_histogram.get_bins()[indices['end_index'] + 1]    
+    # print('ssd_dupport: ', ssd_support)
+    # print('ssd_histogram: ', ssd_histogram.to_string()) 
+    # print(sorted_sample_count)
+    # print(min_bin_value_threshold)
+    # print(trimmed_sample_count)
     return 0.5 * (bottom_threshold + top_threshold)
     
   def to_string(self):

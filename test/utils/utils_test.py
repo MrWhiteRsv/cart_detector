@@ -50,9 +50,7 @@ def get_longest_run_indices_test():
 
   # Empty list.
   lst = []
-  print (lst)
   indices = src.utils.utils.get_longest_run_indices(lst = lst, val = 0)
-  print (indices)
   if indices['start_index'] != None or indices['end_index'] != None:
     return False
     
@@ -66,7 +64,6 @@ def first_different_index_test():
     
   lst = [0, 0, 0, 0, 0]
   res = src.utils.utils.first_different_index(lst = lst, val = 0)
-  print res
   if (res != None):
     return False
     
