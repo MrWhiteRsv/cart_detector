@@ -38,8 +38,8 @@ class HallSensorTrainer():
     self.update_ssd_values(sample)
     if (self.sample_index >= self.LAG):
       sampled_val = self.activeBuffer[-(1 +	 self.LAG)]
-      self.logger.log_training_reading(val = sampled_val, filtered_val = 2,
-          reading_counter = self.sample_index - self.LAG)
+      #self.logger.log_training_reading(val = sampled_val, filtered_val = 2,
+      #    reading_counter = self.sample_index - self.LAG)
     self.sample_index = self.sample_index + 1
       
   def get_high_low_threshold(self):

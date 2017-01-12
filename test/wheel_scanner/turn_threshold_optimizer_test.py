@@ -1,9 +1,12 @@
 """ This class is responsible to test the turn_treshold_optimzer. """
 
 import random
+
 from operator import add
 from src.wheel_scanner import turn_threshold_evaluator
 from src.wheel_scanner import turn_threshold_optimizer
+
+import src.utils.logger
 import src.utils.utils
 
 def test():
@@ -35,48 +38,53 @@ def test():
   signal = signal + [0] * 100
   noise = [0.2 * random.random() for i in xrange(len(signal))]
   noisy_signal = map(add, signal, noise)
-  if not evaluate_signal(noisy_signal, 200, 200):
+  if not evaluate_signal(noisy_signal, 198, 203):
     return False
 
   # signal BM_0 sensor 0
   signal = src.utils.utils.get_signal_from_file('benchmark_0.dat', 'val_0')
   if (not signal):
     return False
-  if not evaluate_signal(signal, 80, 90):
+  if not evaluate_signal(signal, 85, 95):
     return False
 
-  # signal BM_1 sensor 1  
+  # signal BM_0 sensor 1  
   signal = src.utils.utils.get_signal_from_file('benchmark_0.dat', 'val_1')
   if (not signal):
     return False
-  if not evaluate_signal(signal, 80, 90): # ~90 Turns
+  if not evaluate_signal(signal, 85, 95): # ~90 Turns
    return False
    
-  # signal BM_0 sensor 0 
-  """signal = src.utils.utils.get_signal_from_file('benchmark_1.dat', 'val_0')
+  # signal BM_1 sensor 0 
+  logger =  src.utils.logger.Logger()
+  logger.open(run_name = 'bm_1_sensor_0', log_to_mqtt_file = False,
+      log_to_mqtt = False, log_to_stdout = False, log_to_txt_files = True)
+  signal = src.utils.utils.get_signal_from_file('benchmark_1.dat', 'val_0')
   if (not signal):
     return False
-  if not evaluate_signal(signal, 150, 170):
+  if not evaluate_signal(signal, 154, 182, logger = logger):  #168
     return False
-  """
-     
-  # signal BM_0 sensor 2 
+
+  # signal BM_1 sensor 1 
+  logger =  src.utils.logger.Logger()
+  logger.open(run_name = 'bm_1_sensor_1', log_to_mqtt_file = False,
+      log_to_mqtt = False, log_to_stdout = False, log_to_txt_files = True)
   signal = src.utils.utils.get_signal_from_file('benchmark_1.dat', 'val_1')
   if (not signal):
     return False
-  if not evaluate_signal(signal, 150, 170):
+  if not evaluate_signal(signal, 154, 182, logger = logger):  #168
     return False
-   
+  
   return True
 
 """ logic """
 
-def evaluate_signal(signal, miv_value, max_value):
+def evaluate_signal(signal, miv_value, max_value, logger = None):
   thresholds = turn_threshold_optimizer.optimize_thresholds(signal)
-  # print ('top_threshold', thresholds['top_threshold'], 'bottom_threshold', thresholds['bottom_threshold'])
   evaluation = turn_threshold_evaluator.evaluate_thrsholds(
       signal_lst = signal, bottom_threshold = thresholds['bottom_threshold'],
-      top_threshold = thresholds['top_threshold'] , min_level_samples = 1)
+      top_threshold = thresholds['top_threshold'] , min_level_samples = 1,
+      logger = logger)
   print('evaluation:', evaluation)
   return (evaluation['overall_shifts'] >= miv_value and
       evaluation['overall_shifts'] <= max_value)

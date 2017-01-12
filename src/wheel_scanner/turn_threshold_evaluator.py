@@ -3,6 +3,8 @@ thresholds. """
 
 from enum import Enum
 
+# import src.utils.logger
+
 class SignalLevel(Enum):
   LOW = 1
   MIDDLE = 2
@@ -15,7 +17,8 @@ class State(Enum):
   HIGH_TO_MIDDLE = 4
   HIGH = 5
   
-def evaluate_thrsholds(signal_lst, bottom_threshold, top_threshold, min_level_samples):
+def evaluate_thrsholds(signal_lst, bottom_threshold, top_threshold, min_level_samples,
+    logger = None):
   """ Evaluates the impact of the given thresholds on a signal_lst.
     
   Args:
@@ -32,11 +35,16 @@ def evaluate_thrsholds(signal_lst, bottom_threshold, top_threshold, min_level_sa
   """
   state = State.UNDEFINED
   res = {'overall_shifts' :  0, 'short_shifts' : 0}
-  for val in signal_lst:
+  for i in range(len(signal_lst)):
+    val = signal_lst[i]
+    if (logger):
+      logger.log_val_txt(i, val)
     signal_level = compute_signal_level(val, bottom_threshold, top_threshold)
     new_state = compute_state(state, signal_level)
     if (compute_did_shift(state, new_state)):
       res['overall_shifts'] = res['overall_shifts'] + 1
+      if (logger):
+        logger.log_shift_txt(i, val)
     state = new_state
   return res
 

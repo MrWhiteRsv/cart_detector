@@ -61,17 +61,16 @@ def optimize_thresholds(signal_lst):
       trimmed_active_sample_count)
   """
   range_width = hist_range_top - hist_range_bottom
-  res = {'bottom_threshold' : hist_range_bottom + 0.2 * range_width,
-         'top_threshold' : hist_range_top -  0.2 * range_width}
+  res = {'bottom_threshold' : hist_range_bottom + 0.3 * range_width,
+         'top_threshold' : hist_range_top -  0.3 * range_width}
          
-  if (False): # debug
-    
+  if (True): # debug
     # print('activity_threshold:', activity_threshold)
     # print('filtered_signals_histogram:', filtered_signals_histogram.to_string())
     # print('trimmed_active_sample_count:', trimmed_active_sample_count)
-    print('histogram_range: ', range_width)
-
+    # print('histogram_range: ', range_width)
     print res
+    
   return res
   
 """ logic """

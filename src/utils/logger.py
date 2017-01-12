@@ -7,15 +7,16 @@ import paho.mqtt.publish as publish
 class Logger():
 
   mqtt_log_file = None
-  hall0_file = None
-  hall1_file = None
   do_log_to_mqtt_file = None
   do_log_to_mqtt = None
   do_log_to_stdout = None
   
-  hall0_training_file = None
-  hall0_training_filtered_file = None
+  do_log_to_txt_files = None
   
+  """ grapher txt files, for debugging purposes. """
+  hall_file = None
+  hall_turn_file = None
+      
   """ --- Event logging ---"""
     
   def log_gps_event(self, start_time, lat, lon):
@@ -59,35 +60,46 @@ class Logger():
         reading_counter = reading_counter)
     topic = "cart/cartId/hall_reading"
     self.log_event(topic, key_val, bypass_mqtt = True)
-    self.hall0_file.write(str(reading_counter) + ', ' + str(val_0) + '\n')
-    self.hall1_file.write(str(reading_counter) + ', ' + str(val_1) + '\n')
+  """ self.hall0_file.write(str(reading_counter) + ', ' + str(val_0) + '\n')
+    self.hall1_file.write(str(reading_counter) + ', ' + str(val_1) + '\n')"""
     
   """ --- Training Logging ---"""
-  def log_training_reading(self, val, filtered_val, reading_counter):
+  """def log_training_reading(self, val, filtered_val, reading_counter):
     self.log_to_stdout(str(reading_counter) + ', ' + str(val) + ', ' + str(filtered_val))
     self.hall0_training_file.write(str(reading_counter) + ', ' + str(val) + '\n')
     self.hall0_training_filtered_file.write(str(reading_counter) + ', ' +
-        str(filtered_val) + '\n')
+        str(filtered_val) + '\n')"""
+  
+  def log_val_txt(self, reading_counter, val):
+    self.hall_file.write(str(reading_counter) + ', ' + str(val) + '\n')
     
+  def log_shift_txt(self, reading_counter, val): 
+    self.hall_turn_file.write(str(reading_counter) + ', ' + str(val) + '\n')
+
   """ --- Implementation functions ---"""
    
   def open(self, run_name = 'test_run', log_to_mqtt_file = False,
-      log_to_mqtt = False, log_to_stdout = True):
+      log_to_mqtt = False, log_to_stdout = True, log_to_txt_files = False):
       
-    if (log_to_mqtt_file and run_name):
+    if (log_to_mqtt_file):
+      assert run_name and len(run_name) > 0, 'missing run name'
       mqtt_log_file_name = run_name + '.dat'
       self.mqtt_log_file = open(mqtt_log_file_name, 'w')
-    self.hall0_file = open('hall_0.txt', 'w')
-    self.hall1_file = open('hall_1.txt', 'w')
+    self.do_log_to_txt_files = log_to_txt_files
+    if (self.do_log_to_txt_files):
+      assert run_name and len(run_name) > 0, 'missing run name'
+      self.hall_file = open(run_name + '_hall_file.txt', 'w')
+      self.hall_turn_file = open(run_name + '_hall_turn_file.txt', 'w')
+            
     self.do_log_to_mqtt_file = log_to_mqtt_file
     self.do_log_to_mqtt = log_to_mqtt
     self.do_log_to_stdout = log_to_stdout
     
     dir = os.path.dirname(__file__)
-    hall0_training_file_name = os.path.join(dir, '../logging/hall_0.txt')
-    self.hall0_training_file = open(hall0_training_file_name, 'w')
-    hall0_training_filtered_file_name = os.path.join(dir, '../logging/hall_0_filtered.txt')
-    self.hall0_training_filtered_file = open(hall0_training_filtered_file_name, 'w')
+    # hall0_training_file_name = os.path.join(dir, '../logging/hall_0.txt')
+    # self.hall0_training_file = open(hall0_training_file_name, 'w')
+    # hall0_training_filtered_file_name = os.path.join(dir, '../logging/hall_0_filtered.txt')
+    # self.hall0_training_filtered_file = open(hall0_training_filtered_file_name, 'w')
         
   def close(self):
     self.mqtt_log_file.close()
