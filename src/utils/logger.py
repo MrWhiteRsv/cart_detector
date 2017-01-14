@@ -1,8 +1,8 @@
+import json
 import os
-import json
-
-import json
 import paho.mqtt.publish as publish
+
+import hall_signal_logger
 
 class Logger():
 
@@ -14,9 +14,19 @@ class Logger():
   do_log_to_txt_files = None
   
   """ grapher txt files, for debugging purposes. """
-  hall_file = None
-  hall_turn_file = None
-      
+  hall_signal_0_logger = None
+  hall_signal_1_logger = None
+    
+  #hall_file = None
+  #hall_turn_file = None
+  
+  """ getters """
+  def get_hall_signal_0_logger(self):
+    return self.hall_signal_0_logger
+
+  def get_hall_signal_1_logger(self):
+    return self.hall_signal_1_logger
+
   """ --- Event logging ---"""
     
   def log_gps_event(self, start_time, lat, lon):
@@ -55,11 +65,11 @@ class Logger():
     
   """ --- Scan logging ---"""
     
-  def log_hall_reading(self, start_time, val_0, val_1, reading_counter):
+  """def log_hall_reading(self, start_time, val_0, val_1, reading_counter):
     key_val = dict(start_time = start_time, val_0 = val_0, val_1 = val_1,
         reading_counter = reading_counter)
     topic = "cart/cartId/hall_reading"
-    self.log_event(topic, key_val, bypass_mqtt = True)
+    self.log_event(topic, key_val, bypass_mqtt = True)"""
   """ self.hall0_file.write(str(reading_counter) + ', ' + str(val_0) + '\n')
     self.hall1_file.write(str(reading_counter) + ', ' + str(val_1) + '\n')"""
     
@@ -70,11 +80,11 @@ class Logger():
     self.hall0_training_filtered_file.write(str(reading_counter) + ', ' +
         str(filtered_val) + '\n')"""
   
-  def log_val_txt(self, reading_counter, val):
+  """def log_val_txt(self, reading_counter, val):
     self.hall_file.write(str(reading_counter) + ', ' + str(val) + '\n')
     
   def log_shift_txt(self, reading_counter, val): 
-    self.hall_turn_file.write(str(reading_counter) + ', ' + str(val) + '\n')
+    self.hall_turn_file.write(str(reading_counter) + ', ' + str(val) + '\n')"""
 
   """ --- Implementation functions ---"""
    
@@ -88,8 +98,12 @@ class Logger():
     self.do_log_to_txt_files = log_to_txt_files
     if (self.do_log_to_txt_files):
       assert run_name and len(run_name) > 0, 'missing run name'
-      self.hall_file = open(run_name + '_hall_file.txt', 'w')
-      self.hall_turn_file = open(run_name + '_hall_turn_file.txt', 'w')
+      # self.hall_file = open(run_name + '_hall_file.txt', 'w')
+      # self.hall_turn_file = open(run_name + '_hall_turn_file.txt', 'w')
+      self.hall_signal_0_logger = hall_signal_logger.HallSignalLogger()
+      self.hall_signal_1_logger = hall_signal_logger.HallSignalLogger()
+      self.hall_signal_0_logger.open('run_name' + '_signal_0')
+      self.hall_signal_1_logger.open('run_name' + '_signal_1')
             
     self.do_log_to_mqtt_file = log_to_mqtt_file
     self.do_log_to_mqtt = log_to_mqtt
@@ -100,11 +114,14 @@ class Logger():
     # self.hall0_training_file = open(hall0_training_file_name, 'w')
     # hall0_training_filtered_file_name = os.path.join(dir, '../logging/hall_0_filtered.txt')
     # self.hall0_training_filtered_file = open(hall0_training_filtered_file_name, 'w')
-        
+
+    
   def close(self):
     self.mqtt_log_file.close()
     self.mqtt_log_file = None
-      
+    self.hall_signal_0_logger.close()
+    self.hall_signal_1_logger.close()
+          
   def log_event(self, topic, key_val, bypass_mqtt = False):
     if not bypass_mqtt:
       self.log_to_mqtt(topic, json.dumps(key_val))

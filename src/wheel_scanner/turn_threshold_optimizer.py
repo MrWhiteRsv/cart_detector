@@ -21,7 +21,7 @@ def optimize_thresholds_with_revolutions(signal_lst, revolutions):
   print ('optimize_thrsholds_with_revolutions')
   return {}
     
-def optimize_thresholds(signal_lst):
+def optimize_thresholds(signal_lst, hall_signal_logger = None):
   """ Evaluates the impact of the given thresholds on a signal_lst.
     
   Args:
@@ -36,15 +36,18 @@ def optimize_thresholds(signal_lst):
 
   activity_threshold = activity_threshold_calculator.compute_threshold(signal_lst)  
   ssd_lst = ssd_calculator.SsdCalculator.compute_ssd_signal(signal_lst)
+  # if hall_signal_logger:
+  #  hall_signal_logger.log_activity_lst(ssd_lst)
+
   filtered_lst = []
+
 
   for i in range(len(ssd_lst)):
     if (ssd_lst[i] > activity_threshold):
       filtered_lst.append(signal_lst[i])
-      # filtered_signals_histogram.add_sample(signal_lst[i])
-      continue
-    continue
-
+      if hall_signal_logger:
+        hall_signal_logger.log_activity(i, 2.0)
+  
   hist_range_bottom = min(float(s) for s in filtered_lst)
   hist_range_top = max(float(s) for s in filtered_lst)
   
@@ -69,6 +72,8 @@ def optimize_thresholds(signal_lst):
     # print('filtered_signals_histogram:', filtered_signals_histogram.to_string())
     # print('trimmed_active_sample_count:', trimmed_active_sample_count)
     # print('histogram_range: ', range_width)
+    print('hist_range_bottom: ', hist_range_bottom)
+    print('hist_range_top: ', hist_range_top)
     print res
     
   return res
