@@ -27,6 +27,25 @@ def get_longest_run_indices(lst, val):
       max_start_index = i - current_run_length + 1
   return {'start_index' : max_start_index,  'end_index' : max_end_index}
   
+def get_longest_central_run_indices(lst, val):
+  """ same as get_longest_run_indices yet prefix val run and suffix val runs are
+      ignored.
+    Example: lst = [0, 0, 0, 1, 0, 0, 1, 1, 0 ,0], val = 0 should yield
+        {'start_index' : 4,  'end_index' : 5}
+  """
+  first_different = first_different_index(lst, val)
+  last_different = last_different_index(lst,val)
+  if (not first_different or not last_different):
+    return None
+  center_lst = lst[first_different:last_different + 1]
+  res = get_longest_run_indices(center_lst, val)
+  if res['start_index'] == None or res['end_index'] == None:
+    return None
+  res['start_index'] = res['start_index'] + first_different
+  res['end_index'] = res['end_index'] + first_different
+  return res
+  
+  
 def first_different_index(lst, val):
   """ Finds the index of the first item in lst that has value different then val.
     

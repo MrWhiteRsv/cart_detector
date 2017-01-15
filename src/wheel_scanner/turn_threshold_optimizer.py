@@ -36,11 +36,10 @@ def optimize_thresholds(signal_lst, hall_signal_logger = None):
 
   activity_threshold = activity_threshold_calculator.compute_threshold(signal_lst)  
   ssd_lst = ssd_calculator.SsdCalculator.compute_ssd_signal(signal_lst)
-  # if hall_signal_logger:
-  #  hall_signal_logger.log_activity_lst(ssd_lst)
+  if hall_signal_logger:
+    hall_signal_logger.log_activity_lst(ssd_lst)
 
   filtered_lst = []
-
 
   for i in range(len(ssd_lst)):
     if (ssd_lst[i] > activity_threshold):

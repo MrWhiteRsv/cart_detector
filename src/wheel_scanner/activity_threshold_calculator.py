@@ -20,13 +20,15 @@ def compute_threshold(signal_lst):
     lst = trimmed_sample_count, val = 0)
   bottom_threshold = ssd_histogram.get_bins()[longest_run_indices['start_index']]
   top_threshold = ssd_histogram.get_bins()[longest_run_indices['end_index'] + 1]
-  if (False): # debug
+  if (True): # debug
+  
+    print ('signal:', len(signal_lst), ' ssd:', len(ssd_lst))
     print('ssd_histogram: ', ssd_histogram.to_string())
     # print('ssd_range: ', ssd_range)
     # print('sorted_ssd_count:',  sorted_sample_count)
     # print('min_bin_value_threshold:', min_bin_value_threshold)
-    # print('trimmed_ssd_count:', trimmed_sample_count) 
-    # print('longest_run_indices: ', longest_run_indices)
+    print('trimmed_ssd_count:', trimmed_sample_count) 
+    print('longest_run_indices: ', longest_run_indices)
     print('bottom_threshold: ', bottom_threshold)
     print('top_threshold: ', top_threshold)
     print('activity threshold: ', 0.5 * (bottom_threshold + top_threshold))
