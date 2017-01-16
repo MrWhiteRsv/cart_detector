@@ -21,11 +21,11 @@ def main(argv):
   print ('________ Turn Threshold Evaluator Test ________\n')
   res = turn_threshold_evaluator_test.test()
   print('pass' if res else 'fail')
-
+  """
   print ('________ Turn Threshold Optimizer Test ________\n')
   res = turn_threshold_optimizer_test.test()
   print('pass' if res else 'fail')
-
+  """
   print ('________ Activity Threshold Calculator Test ________\n')
   res = activity_threshold_calculator_test.test()
   print('pass' if res else 'fail')
@@ -33,11 +33,11 @@ def main(argv):
   print ('________ SSD Calculator Test ________\n')
   res = ssd_calculator_test.test()
   print('pass' if res else 'fail')
-"""
+  
   print ('________ Utils Test ________\n')
   res = utils_test.test()
   print('pass' if res else 'fail')
-"""  
+  
   print ('________ Histogram Test ________\n')
   res = histogram_test.HistogramTest().test()
   print('pass' if res else 'fail')

@@ -38,13 +38,13 @@ def evaluate_thrsholds(signal_lst, bottom_threshold, top_threshold, min_level_sa
     signal_level = compute_signal_level(val, bottom_threshold, top_threshold)
     new_state = compute_state(state, signal_level)
     if (compute_did_shift(state, new_state)):
+      if hall_signal_logger:
+        hall_signal_logger.log_turn_event(reading_counter = i, val = val)
       res['overall_shifts'] = res['overall_shifts'] + 1
     state = new_state
   return res
 
 """ logic """
-
-
 
 def compute_did_shift(old_state, new_state):
   if ((old_state == State.LOW or old_state == State.LOW_TO_MIDDLE) and

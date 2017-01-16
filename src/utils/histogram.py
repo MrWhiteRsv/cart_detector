@@ -4,8 +4,9 @@ class Histogram():
   sample_counts = None
 
   def __init__(self, num_bins, min_val, max_val):
+    
     bin_width = (max_val - min_val) / (1. * num_bins)
-    self.bins = map(lambda x: x * bin_width, range(0, num_bins + 1, 1))
+    self.bins = map(lambda x: min_val + x * bin_width, range(0, num_bins + 1, 1))
     bin_count = len(self.bins) - 1
     self.sample_counts = [0] * bin_count
 

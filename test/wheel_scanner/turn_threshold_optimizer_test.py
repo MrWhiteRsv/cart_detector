@@ -15,6 +15,7 @@ def test():
   signal = [0] * 100 + [1, 0] * 100
   if not evaluate_signal(signal, 200, 200):
     return False
+
   # inactive + active.
   signal = [0] * 100 + [1, 0] * 100
   if not evaluate_signal(signal, 200, 200):
@@ -24,6 +25,7 @@ def test():
   if not evaluate_signal(signal, 200, 200):
     return False
   # scaled.
+  
   signal = [0] * 100 + [4, 2] * 100
   if not evaluate_signal(signal, 200, 200):
     return False
@@ -86,8 +88,8 @@ def test():
   signal = src.utils.utils.get_signal_from_file('benchmark_2.dat', 'val_1')
   if (not signal):
     return False
-  if not filter_and_evaluate_signal(signal, 154, 182, hall_signal_logger =
-      logger.get_hall_signal_0_logger()):  #168
+  if not filter_and_evaluate_signal(signal, 140, 160, hall_signal_logger =
+      logger.get_hall_signal_0_logger()):  #150
     return False
   
   return True
