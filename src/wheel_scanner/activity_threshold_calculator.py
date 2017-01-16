@@ -18,18 +18,29 @@ def compute_threshold(signal_lst):
     ssd_histogram.get_sample_counts())
   longest_run_indices = src.utils.utils.get_longest_central_run_indices(
     lst = trimmed_sample_count, val = 0)
+
+  if (not longest_run_indices):
+    return None
+  
   bottom_threshold = ssd_histogram.get_bins()[longest_run_indices['start_index']]
   top_threshold = ssd_histogram.get_bins()[longest_run_indices['end_index'] + 1]
+  activity_threshold = 0.5 * (bottom_threshold + top_threshold)
   if (False): # debug
-    print ('signal:', len(signal_lst), ' ssd:', len(ssd_lst))
+    print('signal_lst:', signal_lst)
+    print('\n\n')
+    print('ssd_lst:', ssd_lst)
+    print('\n\n')
     print('ssd_histogram: ', ssd_histogram.to_string())
     print('trimmed_ssd_count:', trimmed_sample_count) 
     print('longest_run_indices: ', longest_run_indices)
     print('bottom_threshold: ', bottom_threshold)
     print('top_threshold: ', top_threshold)
-    print('activity threshold: ', 0.5 * (bottom_threshold + top_threshold))
+    print('activity threshold: ', activity_threshold)
+    print('\n\n')
+    print('activity signal (0:inactive, 1: active):',
+        map(lambda x : 0 if x < activity_threshold else 1, ssd_lst))
 
-  return 0.5 * (bottom_threshold + top_threshold)
+  return activity_threshold
 
 def get_range(lst):
   return {'min': min(lst), 'max': max(lst)}

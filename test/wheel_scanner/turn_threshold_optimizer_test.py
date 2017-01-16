@@ -10,7 +10,6 @@ import src.utils.logger
 import src.utils.utils
 
 def test():
-  """
   # Simple example.
   signal = [0] * 100 + [1, 0] * 100
   if not evaluate_signal(signal, 200, 200):
@@ -20,12 +19,15 @@ def test():
   signal = [0] * 100 + [1, 0] * 100
   if not evaluate_signal(signal, 200, 200):
     return False
+
+  """
+  
   # shifted.
   signal = [0] * 100 + [4, 3] * 100
   if not evaluate_signal(signal, 200, 200):
     return False
-  # scaled.
-  
+
+  # scaled.  
   signal = [0] * 100 + [4, 2] * 100
   if not evaluate_signal(signal, 200, 200):
     return False
@@ -80,7 +82,7 @@ def test():
     return False
   """
     
-  # signal BM_2 sensor 0 (slightly slower revolutions) 
+  """# signal BM_2 sensor 0 (slightly slower revolutions) 
   print('\n\n\n')
   logger =  src.utils.logger.Logger()
   logger.open(run_name = 'bm_2_sensor_1', log_to_mqtt_file = False,
@@ -90,7 +92,7 @@ def test():
     return False
   if not filter_and_evaluate_signal(signal, 140, 160, hall_signal_logger =
       logger.get_hall_signal_0_logger()):  #150
-    return False
+    return False"""
   
   return True
 

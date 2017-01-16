@@ -73,15 +73,16 @@ def optimize_thresholds(signal_lst, hall_signal_logger = None):
          'top_threshold' : hist_range_top -  0.3 * range_width}
          
   if (False): # debug
-    print ('bottom_filtered_value:', bottom_filtered_value)
-    print ('top_filtered_value:', top_filtered_value)
-    print ('len(filtered_lst):', len(filtered_lst))
+    print('signal_lst:', signal_lst)
+    print('bottom_filtered_value:', bottom_filtered_value)
+    print('top_filtered_value:', top_filtered_value)
+    print('\n\nfiltered_lst:', filtered_lst)
     print ('filtered_signals_histogram', filtered_signals_histogram.to_string())
-    print ('sorted_filtered_values:', sorted_filtered_values)
-    print ('min_bin_value_threshold:', min_bin_value_threshold)
-    print('hist_range_bottom: ', hist_range_bottom)
-    print('hist_range_top: ', hist_range_top)
-    print res
+    #print ('\n\nsorted_filtered_values:', sorted_filtered_values)
+    #print ('min_bin_value_threshold:', min_bin_value_threshold)
+    #print('hist_range_bottom: ', hist_range_bottom)
+    #print('hist_range_top: ', hist_range_top)
+    #print res
     
   return res
   

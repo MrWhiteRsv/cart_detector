@@ -34,8 +34,8 @@ def get_longest_central_run_indices(lst, val):
         {'start_index' : 4,  'end_index' : 5}
   """
   first_different = first_different_index(lst, val)
-  last_different = last_different_index(lst,val)
-  if (not first_different or not last_different):
+  last_different = last_different_index(lst, val)
+  if (first_different == None or last_different == None):
     return None
   center_lst = lst[first_different:last_different + 1]
   res = get_longest_run_indices(center_lst, val)

@@ -15,12 +15,16 @@ class Histogram():
     for i in range(bin_count):
       if (self.bins[i] <= val) and (val < self.bins[i + 1]):
         self.sample_counts[i] += 1
+    if val ==  self.bins[-1]:
+      self.sample_counts[-1] += 1
         
   def remove_sample(self, val):
     bin_count = len(self.bins) - 1
     for i in range(bin_count):
       if (self.bins[i] <= val) and (val < self.bins[i + 1]):
         self.sample_counts[i] -= 1
+      if val ==  self.bins[-1]:
+        self.sample_counts[-1] -= 1
 
   def get_bins(self):
     return list(self.bins)
