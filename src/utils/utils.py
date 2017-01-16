@@ -48,11 +48,9 @@ def get_longest_central_run_indices(lst, val):
   
 def first_different_index(lst, val):
   """ Finds the index of the first item in lst that has value different then val.
-    
   Args:
     lst: list of values.
-    val: the checked value
-  
+    val: the checked value.
   Returns:
     index of item. None if no such item exists.
   """
@@ -63,11 +61,9 @@ def first_different_index(lst, val):
     
 def last_different_index(lst, val):
   """ Finds the index of the last item in lst that has value different then val.
-    
   Args:
     lst: list of values.
-    val: the checked value
-  
+    val: the checked value.
   Returns:
     index of item. None if no such item exists.
   """
@@ -75,6 +71,27 @@ def last_different_index(lst, val):
     if number != val: # or 'if number:'
       return len(lst) - index - 1
   return None
+  
+  
+def get_prefix_index(lst, fraction):
+  """ Finds index of item pointing to the max prefix with sum less than or equel
+      fraction.
+  Args:
+    lst: list of numeric values.
+    fraction: a fraction of the total sum of values in lst.  
+  Returns:
+    index of item pointing to the prefix with a sum less than fraction items.
+  Example: get_prefix_index([1, 2, 2, 5, 15], fraction = 0.25) == 2
+  """
+  prefix_max_sum = fraction * reduce(lambda x, y: (x + y), lst)
+  prefix_sum = 0
+  for index in range(len(lst)):
+    prefix_sum = prefix_sum + lst[index]
+    if prefix_sum > prefix_max_sum:
+      break;
+  if index == 0 or index == len(lst):
+    return None
+  return index - 1
 
 def get_signal_from_file(file_name, val_key):
   signal = []
