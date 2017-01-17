@@ -46,7 +46,6 @@ class WheelScanner:
         self.revolution_counter = self.revolution_counter + 1
         under = False
         self.logger.log_turn_event(time.time(), self.revolution_counter)
-        #print 'half revolution:', self.revolution_counter
         self.monitor.notify_turn(self.revolution_counter)
       if not under and sensor_0_val < bottom_threshold:
         self.revolution_counter = self.revolution_counter + 1

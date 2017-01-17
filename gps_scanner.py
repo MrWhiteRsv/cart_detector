@@ -3,7 +3,9 @@ from gps3 import gps3
 import time
 import threading
 
-import utils
+import src.utils.utils
+
+from src.utils.repeated_timer import RepeatedTimer
     
 class GpsScanner:
  
@@ -16,7 +18,7 @@ class GpsScanner:
   recent_lon = None
   
   def open(self):
-    self.repeated_timer_inst = utils.RepeatedTimer(5, self.log_scan)
+    self.repeated_timer_inst = RepeatedTimer(5, self.log_scan)
     self.worker = threading.Thread(target = self.start_continous_scan)
     self.worker.do_run = True
     self.worker.start()
@@ -52,7 +54,7 @@ class GpsScanner:
         data_stream.unpack(new_data)
         lat = data_stream.TPV['lat']
         lon = data_stream.TPV['lon']
-        if (utils.is_number(lat) and utils.is_number(lon)):
+        if (src.utils.utils.is_number(lat) and src.utils.utils.is_number(lon)):
           self.recent_lat = lat
           self.recent_lon = lon
           self.recent_scan_time_utc_sec = time.time()

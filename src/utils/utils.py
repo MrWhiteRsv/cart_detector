@@ -113,3 +113,19 @@ def get_signal_from_file(file_name, val_key):
     traceback.print_exc()
     return None
 
+def is_number(s):
+  try:
+    float(s)
+    return True
+  except ValueError:
+    return False
+    
+# Taken as is from:
+# http://www.raspberrypi-spy.co.uk/2012/06/finding-the-mac-address-of-a-raspberry-pi/#prettyPhoto
+def getMAC(interface):
+  # Return the MAC address of interface
+  try:
+    str = open('/sys/class/net/' + interface + '/address').read()
+  except:
+    str = "00:00:00:00:00:00"
+  return str[0:17]

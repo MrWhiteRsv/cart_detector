@@ -10,6 +10,7 @@ import time
 import utils
 
 import wheel_scanner
+import src.utils.monitor
 
 from threading import Timer
 import src.utils.logger
@@ -18,7 +19,7 @@ def scan(log_file):
   logger = src.utils.logger.Logger()
   logger.open(run_name = log_file, log_to_mqtt_file = True, log_to_mqtt = False,
       log_to_stdout = False)
-  monitor = utils.Monitor()
+  monitor = src.utils.monitor.Monitor()
   
   gps_scanner_inst = gps_scanner.GpsScanner()
   ble_scanner_inst = ble_scanner.BleScanner()
