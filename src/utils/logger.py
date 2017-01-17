@@ -65,13 +65,15 @@ class Logger():
     
   """ --- Scan logging ---"""
     
-  """def log_hall_reading(self, start_time, val_0, val_1, reading_counter):
+  def log_hall_reading(self, start_time, val_0, val_1, reading_counter):
     key_val = dict(start_time = start_time, val_0 = val_0, val_1 = val_1,
         reading_counter = reading_counter)
     topic = "cart/cartId/hall_reading"
-    self.log_event(topic, key_val, bypass_mqtt = True)"""
-  """ self.hall0_file.write(str(reading_counter) + ', ' + str(val_0) + '\n')
-    self.hall1_file.write(str(reading_counter) + ', ' + str(val_1) + '\n')"""
+    self.log_event(topic, key_val, bypass_mqtt = True)
+    """ 
+    self.hall0_file.write(str(reading_counter) + ', ' + str(val_0) + '\n')
+    self.hall1_file.write(str(reading_counter) + ', ' + str(val_1) + '\n')
+    """
     
   """ --- Training Logging ---"""
   """def log_training_reading(self, val, filtered_val, reading_counter):
@@ -114,7 +116,6 @@ class Logger():
     # self.hall0_training_file = open(hall0_training_file_name, 'w')
     # hall0_training_filtered_file_name = os.path.join(dir, '../logging/hall_0_filtered.txt')
     # self.hall0_training_filtered_file = open(hall0_training_filtered_file_name, 'w')
-
     
   def close(self):
     self.mqtt_log_file.close()

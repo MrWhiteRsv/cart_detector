@@ -39,51 +39,56 @@ def optimize_thresholds(signal_lst, hall_signal_logger = None):
   if hall_signal_logger:
     hall_signal_logger.log_activity_lst(ssd_lst)
 
-  filtered_lst = []
+  active_signal_lst = []
 
   for i in range(len(ssd_lst)):
     if (ssd_lst[i] > activity_threshold):
-      filtered_lst.append(signal_lst[i])
+      active_signal_lst.append(signal_lst[i])
       if hall_signal_logger:
         hall_signal_logger.log_activity(i, 2.0)
-  
-  if (False):
-    hist_range_bottom = min(float(s) for s in filtered_lst)
-    hist_range_top = max(float(s) for s in filtered_lst)
-  else:
-    bottom_filtered_value = min(float(s) for s in filtered_lst)
-    top_filtered_value = max(float(s) for s in filtered_lst)
-  
-    filtered_signals_histogram = histogram.Histogram(num_bins = 50,
-        min_val = bottom_filtered_value, max_val = top_filtered_value)
-    for val in filtered_lst:
-      filtered_signals_histogram.add_sample(val)
-    sorted_filtered_values = sorted(filtered_signals_histogram.get_sample_counts())
-    min_bin_value_threshold = src.utils.utils.get_prefix_index(
-        sorted_filtered_values, fraction = 0.03)
-        
-    trimmed_active_sample_count = map(
-		    lambda x: x if x >= min_bin_value_threshold else 0,
-		    filtered_signals_histogram.get_sample_counts())
-    (hist_range_bottom, hist_range_top) = get_historam_range(
-        filtered_signals_histogram.get_bins(), trimmed_active_sample_count)
 
+  bottom_active_value = min(float(s) for s in active_signal_lst)
+  top_active_value = max(float(s) for s in active_signal_lst)
+  active_signals_histogram = histogram.Histogram(num_bins = 50,
+      min_val = bottom_active_value, max_val = top_active_value)
+  for val in active_signal_lst:
+    active_signals_histogram.add_sample(val)
+  sorted_active_values = sorted(active_signals_histogram.get_sample_counts())
+  # filter outliers.
+  min_bin_value_threshold = sorted_active_values[src.utils.utils.get_prefix_index(
+      sorted_active_values, fraction = 0.03)]
+      
+  trimmed_active_sample_count = map(
+      lambda x: x if x >= min_bin_value_threshold else 0,
+      active_signals_histogram.get_sample_counts())
+  hist_range = get_historam_range(
+      active_signals_histogram.get_bins(), trimmed_active_sample_count)
+
+  if hist_range == None:
+    return hist_range
+
+  (hist_range_bottom, hist_range_top) = hist_range
+     
   range_width = hist_range_top - hist_range_bottom
-  res = {'bottom_threshold' : hist_range_bottom + 0.3 * range_width,
-         'top_threshold' : hist_range_top -  0.3 * range_width}
-         
+  
   if (False): # debug
-    print('signal_lst:', signal_lst)
-    print('bottom_filtered_value:', bottom_filtered_value)
-    print('top_filtered_value:', top_filtered_value)
-    print('\n\nfiltered_lst:', filtered_lst)
-    print ('filtered_signals_histogram', filtered_signals_histogram.to_string())
-    #print ('\n\nsorted_filtered_values:', sorted_filtered_values)
-    #print ('min_bin_value_threshold:', min_bin_value_threshold)
+    #print('signal_lst:', signal_lst)
+    #print('bottom_active_value:', bottom_active_value)
+    #print('top_active_value:', top_active_value)
+    #print('\n\n')
+    #print('active_signal_lst:', active_signal_lst)
+    print('active_signals_histogram', active_signals_histogram.to_string())
+    print('\n\n')
+    print('sorted_active_values:', sorted_active_values)
+    
+    print('min_bin_value_threshold:', min_bin_value_threshold)
     #print('hist_range_bottom: ', hist_range_bottom)
     #print('hist_range_top: ', hist_range_top)
     #print res
-    
+
+  res = {'bottom_threshold' : hist_range_bottom + 0.3 * range_width,
+         'top_threshold' : hist_range_top -  0.3 * range_width}
+         
   return res
   
 """ logic """
@@ -91,5 +96,7 @@ def optimize_thresholds(signal_lst, hall_signal_logger = None):
 def get_historam_range(bins, sample_count):
   bottom_bin_index = src.utils.utils.first_different_index(sample_count, 0)
   top_bin_index = src.utils.utils.last_different_index(sample_count, 0)
+  if bottom_bin_index == None or top_bin_index == None:
+    return None
   return (bins[bottom_bin_index], bins[top_bin_index])
   
