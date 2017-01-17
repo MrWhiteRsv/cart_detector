@@ -6,9 +6,6 @@ import gps_scanner
 import sensehat_scanner
 import sys
 import time
-
-import utils
-
 import wheel_scanner
 import src.utils.monitor
 

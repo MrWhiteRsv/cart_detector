@@ -6,11 +6,11 @@ from threading import Timer
 # http://stackoverflow.com/questions/3393612/run-certain-code-every-n-seconds
 class RepeatedTimer(object):
   def __init__(self, interval, function, *args, **kwargs):
-    self._timer     = None
-    self.interval   = interval
-    self.function   = function
-    self.args       = args
-    self.kwargs     = kwargs
+    self.timer = None
+    self.interval = interval
+    self.function = function
+    self.args = args
+    self.kwargs = kwargs
     self.is_running = False
 
   def _run(self):
@@ -20,10 +20,10 @@ class RepeatedTimer(object):
 
   def start(self):
     if not self.is_running:
-      self._timer = Timer(self.interval, self._run)
-      self._timer.start()
+      self.timer = Timer(self.interval, self._run)
+      self.timer.start()
       self.is_running = True
 
   def stop(self):
-    self._timer.cancel()
+    self.timer.cancel()
     self.is_running = False
