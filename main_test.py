@@ -2,8 +2,11 @@ import sys
 
 import src.utils.utils
 
+import test.wheel_scanner
+
 from test.wheel_scanner import activity_threshold_calculator_test
 from test.wheel_scanner import hall_sensor_trainer_test
+from test.wheel_scanner import revolution_counter_test
 from test.wheel_scanner import ssd_calculator_test
 from test.wheel_scanner import turn_threshold_evaluator_test
 from test.wheel_scanner import turn_threshold_optimizer_test
@@ -17,10 +20,11 @@ def main(argv):
     for i in range(len(raw)):
       print str(i) + ', ' + str(raw[i])
     return 
-  """
+
   print ('________ Turn Threshold Evaluator Test ________\n')
   res = turn_threshold_evaluator_test.test()
   print('pass' if res else 'fail')
+
   """
   print ('________ Turn Threshold Optimizer Test ________\n')
   res = turn_threshold_optimizer_test.test()
@@ -34,6 +38,10 @@ def main(argv):
   res = ssd_calculator_test.test()
   print('pass' if res else 'fail')
   
+  print ('________ Revolution Counter Test ________\n')
+  res = revolution_counter_test.test()
+  print('pass' if res else 'fail')
+  
   print ('________ Utils Test ________\n')
   res = utils_test.test()
   print('pass' if res else 'fail')
@@ -45,6 +53,6 @@ def main(argv):
   print ('________ Hall Sensor Trainer Test ________\n')
   res = hall_sensor_trainer_test.HallSensorTrainerTest().test()
   print('pass' if res else 'fail')
-  """
+
 if __name__ == '__main__':
   main(sys.argv[1:])

@@ -3,18 +3,6 @@ thresholds. """
 
 from enum import Enum
 
-class SignalLevel(Enum):
-  LOW = 1
-  MIDDLE = 2
-  HIGH = 3
-  
-class State(Enum):
-  UNDEFINED = 1
-  LOW = 2
-  LOW_TO_MIDDLE = 3
-  HIGH_TO_MIDDLE = 4
-  HIGH = 5
-  
 def evaluate_thrsholds(signal_lst, bottom_threshold, top_threshold, min_level_samples,
     hall_signal_logger = None):
   """ Evaluates the impact of the given thresholds on a signal_lst.
@@ -44,7 +32,19 @@ def evaluate_thrsholds(signal_lst, bottom_threshold, top_threshold, min_level_sa
     state = new_state
   return res
 
-""" logic """
+""" internals """
+
+class SignalLevel(Enum):
+  LOW = 1
+  MIDDLE = 2
+  HIGH = 3
+  
+class State(Enum):
+  UNDEFINED = 1
+  LOW = 2
+  LOW_TO_MIDDLE = 3
+  HIGH_TO_MIDDLE = 4
+  HIGH = 5
 
 def compute_did_shift(old_state, new_state):
   if ((old_state == State.LOW or old_state == State.LOW_TO_MIDDLE) and
