@@ -33,7 +33,7 @@ class WheelScanner:
     self.logger = None
     self.worker.do_run = False
     self.worker.join()
-    
+
   def start_continous_scan(self):
     under = True
     sensor_0_val = 0
@@ -56,3 +56,28 @@ class WheelScanner:
         self.revolution_counter = self.revolution_counter + 1
         under = True
         self.logger.log_turn_event(time.time(), self.revolution_counter)
+
+  """  
+  def deprecated_start_continous_scan(self):
+    under = True
+    sensor_0_val = 0
+    sensor_1_val = 0 
+    while True:
+      if (not getattr(self.worker, "do_run", True)) :
+        break;
+      self.reading_counter = self.reading_counter + 1
+      sensor_0_val = analog.read(0)
+      sensor_1_val = analog.read(1)
+      self.logger.log_hall_reading(time.time(), sensor_0_val,
+          sensor_1_val, self.reading_counter)
+      print ('hall sensor_0_val', sensor_0_val, 'hall sensor_1_val', sensor_1_val)
+      if under and sensor_0_val > self.sensor_0_top_threshold:
+        self.revolution_counter = self.revolution_counter + 1
+        under = False
+        self.logger.log_turn_event(time.time(), self.revolution_counter)
+        # self.monitor.notify_turn(self.revolution_counter)
+      if not under and sensor_0_val < self.sensor_0_bottom_threshold:
+        self.revolution_counter = self.revolution_counter + 1
+        under = True
+        self.logger.log_turn_event(time.time(), self.revolution_counter)
+  """
