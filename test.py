@@ -25,11 +25,10 @@ def main(argv):
   res = turn_threshold_evaluator_test.test()
   print('pass' if res else 'fail')
 
-  """
   print ('________ Turn Threshold Optimizer Test ________\n')
   res = turn_threshold_optimizer_test.test()
   print('pass' if res else 'fail')
-  """
+
   print ('________ Activity Threshold Calculator Test ________\n')
   res = activity_threshold_calculator_test.test()
   print('pass' if res else 'fail')

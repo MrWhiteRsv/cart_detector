@@ -2,9 +2,6 @@ import json
 import threading
 import sys
 import time
-import utils
-
-# from sense_hat import SenseHat
 
 from py_beacon.proximity import *
 
@@ -35,18 +32,11 @@ class BleScanner:
   def start_continous_scan(self):
     # print 'starting continous ble scan'
     supermetric_beacons = {}
-    #supermetric_beacons['34:b1:f7:d3:9e:2b'] = self.create_beacon_state()
-    #supermetric_beacons['34:b1:f7:d3:91:f8'] = self.create_beacon_state()
-    #supermetric_beacons['34:b1:f7:d3:90:9f'] = self.create_beacon_state()
-    #supermetric_beacons['34:b1:f7:d3:9d:a3'] = self.create_beacon_state()
-    
     supermetric_beacons['34:b1:f7:d3:91:c8'] = self.create_beacon_state()
     supermetric_beacons['34:b1:f7:d3:9c:cb'] = self.create_beacon_state()
     supermetric_beacons['34:b1:f7:d3:91:e4'] = self.create_beacon_state()
     supermetric_beacons['34:b1:f7:d3:9d:eb'] = self.create_beacon_state()
     supermetric_beacons['34:b1:f7:d3:90:8e'] = self.create_beacon_state()
-    
-    
     scanner = Scanner()
 
     while True:
@@ -74,7 +64,6 @@ class BleScanner:
               self.monitor.notify_beacon(self.color_of_mac(mac))
               supermetric_beacons[mac]['near_beacon'] = True
             if gotAwayFromBeacon:
-              # sense.show_message("Cold")
               self.logger.log_ble_event(mac,
                   supermetric_beacons[mac]['start_ts'],
                   supermetric_beacons[mac]['end_ts'],
@@ -86,7 +75,6 @@ class BleScanner:
             supermetric_beacons[mac]['start_ts'] = time_sec
             supermetric_beacons[mac]['nearest_ts'] = time_sec
             supermetric_beacons[mac]['nearest_rssi'] = rssi 
-    # print 'stopped continous ble scan' 
 
   def start(self, logger, monitor):
     self.logger = logger

@@ -1,6 +1,6 @@
 import time
 import threading
-import utils
+from src.utils.repeated_timer import RepeatedTimer
 
 from sense_hat import SenseHat
     
@@ -14,7 +14,7 @@ class SensehatScanner:
 
   def start(self, logger):
     self.logger = logger
-    self.repeated_timer_inst = utils.RepeatedTimer(5, self.log_scan)
+    self.repeated_timer_inst = RepeatedTimer(5, self.log_scan)
     self.worker = threading.Thread(target = self.start_continous_scan)
     self.sense = SenseHat()
     self.worker.do_run = True 

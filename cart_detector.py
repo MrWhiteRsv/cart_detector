@@ -1,15 +1,16 @@
 # Responsible for starting and stopping the different scanners 
 
-import ble_scanner
 import getopt
-import gps_scanner
-import sensehat_scanner
 import sys
-import time
-import wheel_scanner
-import src.utils.monitor
-
 from threading import Timer
+import time
+
+from src.ble import ble_scanner
+from src.gps import gps_scanner
+from src.sensehat import sensehat_scanner
+from src.wheel_scanner import wheel_scanner
+
+import src.utils.monitor
 import src.utils.logger
 
 def scan(log_file):
