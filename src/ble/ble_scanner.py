@@ -7,7 +7,6 @@ from py_beacon.proximity import *
 
 class BleScanner:
   logger = None
-  monitor = None
   worker = None
         
   def create_beacon_state(self):
@@ -61,7 +60,7 @@ class BleScanner:
             supermetric_beacons[mac]['end_ts'] = time_sec
             if gotCloseToBeacon:
               # print 'got close to beacon: ', mac, ' at time:' , time_sec
-              self.monitor.notify_beacon(self.color_of_mac(mac))
+              # self.monitor.notify_beacon(self.color_of_mac(mac))
               supermetric_beacons[mac]['near_beacon'] = True
             if gotAwayFromBeacon:
               self.logger.log_ble_event(mac,
@@ -70,15 +69,14 @@ class BleScanner:
                   supermetric_beacons[mac]['nearest_ts'],
                   supermetric_beacons[mac]['nearest_rssi'])
               # print 'got away from beacon: ', mac, ' at time: ' , time_sec
-              self.monitor.notify_beacon('black')
+              # self.monitor.notify_beacon('black')
               supermetric_beacons[mac]['near_beacon'] = False
             supermetric_beacons[mac]['start_ts'] = time_sec
             supermetric_beacons[mac]['nearest_ts'] = time_sec
             supermetric_beacons[mac]['nearest_rssi'] = rssi 
 
-  def start(self, logger, monitor):
+  def start(self, logger):
     self.logger = logger
-    self.monitor = monitor
     self.worker = threading.Thread(target = self.start_continous_scan)
     self.worker.do_run = True
     self.worker.start()

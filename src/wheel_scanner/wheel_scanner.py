@@ -8,13 +8,11 @@ class WheelScanner:
  
   worker = None
   logger = None
-  monitor = None
   revolution_counter = None
   reading_counter = None
 
-  def start(self, logger, monitor):
+  def start(self, logger):
     self.logger = logger
-    self.monitor = monitor
     self.worker = threading.Thread(target = self.start_continous_scan)
     self.revolution_counter = 0
     self.reading_counter = 0
@@ -45,7 +43,7 @@ class WheelScanner:
         self.revolution_counter = self.revolution_counter + 1
         under = False
         self.logger.log_turn_event(time.time(), self.revolution_counter)
-        self.monitor.notify_turn(self.revolution_counter)
+        # self.monitor.notify_turn(self.revolution_counter)
       if not under and sensor_0_val < bottom_threshold:
         self.revolution_counter = self.revolution_counter + 1
         under = True

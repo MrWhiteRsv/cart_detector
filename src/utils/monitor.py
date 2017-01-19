@@ -103,7 +103,7 @@ def set_pixel(row, col, rgb_color):
       rgb_color.value[0], rgb_color.value[1], rgb_color.value[2])
     
 """ Deprecated """
-
+"""
 class Monitor():
   
   def __init__(self):
@@ -133,7 +133,7 @@ class Monitor():
     self.set_pixel(3, 3, 'black' if counter & 128 == 0 else 'yellow')
     unicorn.show()
     
-  """ Internals. """
+#  "" " Internals. "" "
   def set_pixel(self, row, col, color):
      (r, g, b) = self.rgb_of_color(color);
      unicorn.set_pixel(row, 3 - col, r, g, b)
@@ -148,3 +148,4 @@ class Monitor():
         'yellow': (255, 255, 80),
         'purple': (128,0,128),
     }.get(color, (255, 255, 255))
+"""

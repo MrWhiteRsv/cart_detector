@@ -10,15 +10,12 @@ from src.gps import gps_scanner
 from src.sensehat import sensehat_scanner
 from src.wheel_scanner import wheel_scanner
 
-import src.utils.monitor
 import src.utils.logger
 
 def scan(log_file):
   logger = src.utils.logger.Logger()
   logger.open(run_name = log_file, log_to_mqtt_file = True, log_to_mqtt = False,
       log_to_stdout = False)
-  monitor = src.utils.monitor.Monitor()
-  
   gps_scanner_inst = gps_scanner.GpsScanner()
   ble_scanner_inst = ble_scanner.BleScanner()
   # sensehat_scanner_inst = sensehat_scanner.SensehatScanner()
@@ -26,8 +23,8 @@ def scan(log_file):
   
   gps_scanner_inst.open()
   gps_scanner_inst.start(logger)
-  ble_scanner_inst.start(logger, monitor)
-  wheel_scanner_inst.start(logger, monitor)
+  ble_scanner_inst.start(logger)
+  wheel_scanner_inst.start(logger)
 
   time.sleep(1800)
   
