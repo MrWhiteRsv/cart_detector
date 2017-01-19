@@ -3,7 +3,9 @@ import threading
 import sys
 import time
 
+import src.utils.monitor
 from py_beacon.proximity import *
+from src.utils.colors import Colors
 
 class BleScanner:
   logger = None
@@ -21,11 +23,11 @@ class BleScanner:
   
   def color_of_mac(self, mac):
     return {
-        '34:b1:f7:d3:91:c8' : 'red',
-        '34:b1:f7:d3:9c:cb' : 'green',
-        '34:b1:f7:d3:91:e4' : 'blue',
-        '34:b1:f7:d3:9d:eb' : 'yellow',
-        '34:b1:f7:d3:90:8e' : 'purple',
+        '34:b1:f7:d3:91:c8' : Colors.RED,
+        '34:b1:f7:d3:9c:cb' : Colors.GREEN,
+        '34:b1:f7:d3:91:e4' : Colors.BLUE,
+        '34:b1:f7:d3:9d:eb' : Colors.YELLOW,
+        '34:b1:f7:d3:90:8e' : Colors.PURPLE,
     }.get(mac, (255, 255, 255))
     
   def start_continous_scan(self):
@@ -59,8 +61,9 @@ class BleScanner:
           if gotCloseToBeacon or gotAwayFromBeacon:
             supermetric_beacons[mac]['end_ts'] = time_sec
             if gotCloseToBeacon:
-              # print 'got close to beacon: ', mac, ' at time:' , time_sec
+              print 'got close to beacon: ', mac, ' at time:' , time_sec
               # self.monitor.notify_beacon(self.color_of_mac(mac))
+              src.utils.monitor.show_beacon_on(self.color_of_mac(mac))
               supermetric_beacons[mac]['near_beacon'] = True
             if gotAwayFromBeacon:
               self.logger.log_ble_event(mac,
@@ -69,7 +72,7 @@ class BleScanner:
                   supermetric_beacons[mac]['nearest_ts'],
                   supermetric_beacons[mac]['nearest_rssi'])
               # print 'got away from beacon: ', mac, ' at time: ' , time_sec
-              # self.monitor.notify_beacon('black')
+              src.utils.monitor.show_beacon_off()
               supermetric_beacons[mac]['near_beacon'] = False
             supermetric_beacons[mac]['start_ts'] = time_sec
             supermetric_beacons[mac]['nearest_ts'] = time_sec

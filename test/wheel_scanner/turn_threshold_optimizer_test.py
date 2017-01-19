@@ -10,6 +10,7 @@ import src.utils.logger
 import src.utils.utils
 
 def test():
+  """
   # Simple example.
   signal = [0] * 100 + [1, 0] * 100
   if not evaluate_signal(signal, 200, 200):
@@ -104,7 +105,8 @@ def test():
     return False
   if not evaluate_signal(signal, 140, 160, hall_signal_logger = None):  #150
     return False
-    
+  """
+  
   # signal BM_3 sensor 0
   logger =  src.utils.logger.Logger()
   logger.open(run_name = 'bm_3_sensor_0', log_to_mqtt_file = False,
@@ -135,6 +137,7 @@ def evaluate_signal(signal, miv_value, max_value, hall_signal_logger = None):
   if hall_signal_logger:
     hall_signal_logger.log_raw_signal_lst(signal)
   thresholds = turn_threshold_optimizer.optimize_thresholds(signal)
+  print ('thresholds: ', thresholds)
   if (thresholds == None):
     return False
   evaluation = turn_threshold_evaluator.evaluate_thrsholds(

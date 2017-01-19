@@ -10,7 +10,13 @@ from src.gps import gps_scanner
 from src.sensehat import sensehat_scanner
 from src.wheel_scanner import wheel_scanner
 
+import src.utils.monitor
 import src.utils.logger
+
+""" returns a thresholds struct for both sensors.  """
+def get_thrsholds():
+  return [{'top_threshold': 2.4393219999999998, 'bottom_threshold': 2.255458},
+   {'top_threshold': 2.4831760000000003, 'bottom_threshold': 2.438824}]
 
 def scan(log_file):
   logger = src.utils.logger.Logger()
@@ -19,15 +25,12 @@ def scan(log_file):
   gps_scanner_inst = gps_scanner.GpsScanner()
   ble_scanner_inst = ble_scanner.BleScanner()
   # sensehat_scanner_inst = sensehat_scanner.SensehatScanner()
-  wheel_scanner_inst = wheel_scanner.WheelScanner()
-  
+  wheel_scanner_inst = wheel_scanner.WheelScanner(get_thrsholds())
   gps_scanner_inst.open()
   gps_scanner_inst.start(logger)
   ble_scanner_inst.start(logger)
   wheel_scanner_inst.start(logger)
-
   time.sleep(1800)
-  
   wheel_scanner_inst.stop()
   # sensehat_scanner_inst.stop()
   ble_scanner_inst.stop()
@@ -36,6 +39,7 @@ def scan(log_file):
   logger.close()
 
 def main(argv):
+  src.utils.monitor.init()
   log_file = ''
   try:
     opts, args = getopt.getopt(argv,"hi:o:",["ifile=","ofile="])
@@ -52,3 +56,4 @@ def main(argv):
 
 if __name__ == '__main__':
     main(sys.argv[1:])
+
