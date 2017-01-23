@@ -7,6 +7,7 @@ class HallSignalLogger():
   activity_file = None
   filtered_signal_file = None
   turn_events_file = None  # turn events of filtered signal
+  reading_counter = None
   
   """ API """
 
@@ -17,6 +18,7 @@ class HallSignalLogger():
     self.activity_file = open(run_name + '_activity_file.txt', 'w')
     self.filtered_signal_file = open(run_name + '_filtered_signal_file.txt', 'w')
     self.turn_events_file = open(run_name + '_turn_events_file.txt', 'w')
+    self.reading_counter = 0
 
   def close(self):
     self.raw_signal_file.close()
@@ -29,8 +31,9 @@ class HallSignalLogger():
     self.turn_events_file = None
 
   def log_raw_signal_lst(self, lst):
-    for reading_counter in range(len(lst)):
-      self.log_raw_signal(reading_counter, lst[reading_counter])
+    for val in lst:
+      self.reading_counter = self.reading_counter + 1
+      self.log_raw_signal(self.reading_counter, val)
     
   def log_activity_lst(self, lst):
     for reading_counter in range(len(lst)):

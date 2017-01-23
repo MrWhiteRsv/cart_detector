@@ -20,7 +20,7 @@ class RevolutionCounter():
     self.sig_1_level = SignalLevel.UNKNOWN
     self.state = None
     self.transition_table = {}
-    if True:
+    if False:
       self.transition_table[((LOW, LOW), (HIGH, LOW))] = Direction.FORWARD
       self.transition_table[((HIGH, LOW), (HIGH, HIGH))] = Direction.FORWARD
       self.transition_table[((HIGH, HIGH), (LOW, HIGH))] = Direction.FORWARD

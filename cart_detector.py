@@ -15,18 +15,22 @@ import src.utils.monitor
 import src.wheel_scanner.trainer
 
 def scan(log_file):
-  logger = src.utils.logger.Logger()
-  logger.open(run_name = log_file, log_to_mqtt_file = True, log_to_mqtt = False,
-      log_to_stdout = False)
-  thrsholds = src.wheel_scanner.trainer.train_cart()
-  
-  print thrsholds
+  training_logger = src.utils.logger.Logger()
+  training_logger.open(run_name = log_file + '_training', log_to_mqtt_file = False,
+      log_to_mqtt = False, log_to_stdout = False, log_to_txt_files = True)  
+  thresholds = src.wheel_scanner.trainer.train_cart(training_logger)
+  #thresholds =[{'top_threshold': 2.300164, 'bottom_threshold': 2.114356}, {'top_threshold': 2.5333840000000003, 'bottom_threshold': 2.484136}]
+  print thresholds
   return
+  
+  logger = src.utils.logger.Logger()
+  logger.open(run_name = log_file, log_to_mqtt_file = True,
+      log_to_mqtt = False, log_to_stdout = False, log_to_txt_files = True)  
   
   gps_scanner_inst = gps_scanner.GpsScanner()
   ble_scanner_inst = ble_scanner.BleScanner()
   # sensehat_scanner_inst = sensehat_scanner.SensehatScanner()
-  wheel_scanner_inst = wheel_scanner.WheelScanner(thrsholds)
+  wheel_scanner_inst = wheel_scanner.WheelScanner(thresholds)
   gps_scanner_inst.open()
   gps_scanner_inst.start(logger)
   ble_scanner_inst.start(logger)

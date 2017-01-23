@@ -93,8 +93,8 @@ class Logger():
       # self.hall_turn_file = open(run_name + '_hall_turn_file.txt', 'w')
       self.hall_signal_0_logger = hall_signal_logger.HallSignalLogger()
       self.hall_signal_1_logger = hall_signal_logger.HallSignalLogger()
-      self.hall_signal_0_logger.open('run_name' + '_signal_0')
-      self.hall_signal_1_logger.open('run_name' + '_signal_1')
+      self.hall_signal_0_logger.open(run_name + '_signal_0')
+      self.hall_signal_1_logger.open(run_name + '_signal_1')
             
     self.do_log_to_mqtt_file = log_to_mqtt_file
     self.do_log_to_mqtt = log_to_mqtt
