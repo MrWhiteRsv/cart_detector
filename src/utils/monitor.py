@@ -56,14 +56,13 @@ def clear_direction():
       set_pixel(row, col, Colors.BLACK)
   unicorn.show()
   
-def clear_direction_stop():
+def show_stop_moving():
   for row in range(5, 8):
     for col in range(0, 3):
       set_pixel(row, col, Colors.RED)
   unicorn.show()
       
-def show_show_arrow_right():
-  color = Colors.YELLOW
+def show_arrow_right(color = Colors.YELLOW):
   clear_direction()
   set_pixel(6, 0, color)
   set_pixel(6, 1, color)
@@ -71,8 +70,7 @@ def show_show_arrow_right():
   set_pixel(7, 1, color)
   unicorn.show()
   
-def show_show_arrow_left():
-  color = Colors.YELLOW
+def show_arrow_left(color = Colors.YELLOW):
   clear_direction()
   set_pixel(6, 0, color)
   set_pixel(6, 1, color)
@@ -80,8 +78,7 @@ def show_show_arrow_left():
   set_pixel(5, 1, color)
   unicorn.show()
   
-def show_show_arrow_top():
-  color = Colors.YELLOW
+def show_arrow_top(color = Colors.YELLOW):
   clear_direction()
   set_pixel(5, 1, color)
   set_pixel(6, 1, color)
@@ -89,8 +86,7 @@ def show_show_arrow_top():
   set_pixel(6, 0, color)
   unicorn.show()
   
-def show_show_arrow_bottom():
-  color = Colors.YELLOW
+def show_arrow_bottom(color = Colors.YELLOW):
   clear_direction()
   set_pixel(5, 1, color)
   set_pixel(6, 1, color)

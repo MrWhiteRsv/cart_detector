@@ -55,11 +55,11 @@ class Logger():
     topic = "cart/cartId/raw_gyro"
     self.log_event(topic, key_val, bypass_mqtt = True)
     
-  def log_turn_event(self, start_time, revolution_counter):
+  def log_turn_event(self, start_time, forward_counter, backward_counter):
     key_val = dict(
         start_time = start_time,
-        forward_counter = revolution_counter,
-        backward_counter = 0)
+        forward_counter = forward_counter,
+        backward_counter = backward_counter)
     topic = "cart/cartId/revolution"
     self.log_event(topic, key_val)
     
@@ -76,17 +76,6 @@ class Logger():
     """
     
   """ --- Training Logging ---"""
-  """def log_training_reading(self, val, filtered_val, reading_counter):
-    self.log_to_stdout(str(reading_counter) + ', ' + str(val) + ', ' + str(filtered_val))
-    self.hall0_training_file.write(str(reading_counter) + ', ' + str(val) + '\n')
-    self.hall0_training_filtered_file.write(str(reading_counter) + ', ' +
-        str(filtered_val) + '\n')"""
-  
-  """def log_val_txt(self, reading_counter, val):
-    self.hall_file.write(str(reading_counter) + ', ' + str(val) + '\n')
-    
-  def log_shift_txt(self, reading_counter, val): 
-    self.hall_turn_file.write(str(reading_counter) + ', ' + str(val) + '\n')"""
 
   """ --- Implementation functions ---"""
    

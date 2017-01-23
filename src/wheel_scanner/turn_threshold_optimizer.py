@@ -5,8 +5,9 @@ import ssd_calculator
 import src.utils.utils
 from src.utils import histogram
 
+"""
 def optimize_thresholds_with_revolutions(signal_lst, revolutions):
-  """ Evaluates the impact of the given thresholds on a signal_lst.
+  Evaluates the impact of the given thresholds on a signal_lst.
     
   Args:
     signal_lst: Samples of forward moving cart which has both an active and an
@@ -17,9 +18,10 @@ def optimize_thresholds_with_revolutions(signal_lst, revolutions):
     A dict of the optimized thresholds, such that the most accurate rotation count
       will be detected. Example
     {'bottom_threshold' :  3.2, 'top_threshold' : 1.8}
-  """
+
   print ('optimize_thrsholds_with_revolutions')
   return {}
+"""
     
 def optimize_thresholds(signal_lst, hall_signal_logger = None):
   """ Evaluates the impact of the given thresholds on a signal_lst.
@@ -72,19 +74,18 @@ def optimize_thresholds(signal_lst, hall_signal_logger = None):
   range_width = hist_range_top - hist_range_bottom
   
   if (False): # debug
-    #print('signal_lst:', signal_lst)
-    #print('bottom_active_value:', bottom_active_value)
-    #print('top_active_value:', top_active_value)
-    #print('\n\n')
-    #print('active_signal_lst:', active_signal_lst)
+    print('signal_lst:', signal_lst)
+    print('bottom_active_value:', bottom_active_value)
+    print('top_active_value:', top_active_value)
+    print('\n\n')
+    print('active_signal_lst:', active_signal_lst)
     print('active_signals_histogram', active_signals_histogram.to_string())
     print('\n\n')
     print('sorted_active_values:', sorted_active_values)
-    
     print('min_bin_value_threshold:', min_bin_value_threshold)
-    #print('hist_range_bottom: ', hist_range_bottom)
-    #print('hist_range_top: ', hist_range_top)
-    #print res
+    print('hist_range_bottom: ', hist_range_bottom)
+    print('hist_range_top: ', hist_range_top)
+    print res
 
   res = {'bottom_threshold' : hist_range_bottom + 0.3 * range_width,
          'top_threshold' : hist_range_top -  0.3 * range_width}

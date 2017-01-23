@@ -1,4 +1,5 @@
-""" This module is responsible for the to count forward and backward revolutios based on signal
+""" 
+This module is responsible for the to count forward and backward revolutios based on signal
 levels. It also retruns feedback regarding the synchronization behavior of both counters.
 """ 
 
@@ -19,14 +20,21 @@ class RevolutionCounter():
     self.sig_1_level = SignalLevel.UNKNOWN
     self.state = None
     self.transition_table = {}
-    self.transition_table[((LOW, LOW), (LOW, HIGH))] = Direction.FORWARD
-    self.transition_table[((LOW, HIGH), (HIGH, HIGH))] = Direction.FORWARD
-    self.transition_table[((HIGH, HIGH), (HIGH, LOW))] = Direction.FORWARD
-    self.transition_table[((HIGH, LOW), (LOW, LOW))] = Direction.FORWARD
-    self.transition_table[((LOW, HIGH), (LOW, LOW))] = Direction.BACKWORD
-    self.transition_table[((HIGH, HIGH), (LOW, HIGH))] = Direction.BACKWORD
-    self.transition_table[((HIGH, LOW), (HIGH, HIGH))] = Direction.BACKWORD
-    self.transition_table[((LOW, LOW), (HIGH, LOW))] = Direction.BACKWORD
+    if True:
+      self.transition_table[((LOW, LOW), (HIGH, LOW))] = Direction.FORWARD
+      self.transition_table[((HIGH, LOW), (HIGH, HIGH))] = Direction.FORWARD
+      self.transition_table[((HIGH, HIGH), (LOW, HIGH))] = Direction.FORWARD
+      self.transition_table[((LOW, HIGH), (LOW, LOW))] = Direction.FORWARD
+    else:
+      self.transition_table[((LOW, LOW), (LOW, HIGH))] = Direction.FORWARD
+      self.transition_table[((LOW, HIGH), (HIGH, HIGH))] = Direction.FORWARD
+      self.transition_table[((HIGH, HIGH), (HIGH, LOW))] = Direction.FORWARD
+      self.transition_table[((HIGH, LOW), (LOW, LOW))] = Direction.FORWARD
+    
+      self.transition_table[((LOW, HIGH), (LOW, LOW))] = Direction.BACKWORD
+      self.transition_table[((HIGH, HIGH), (LOW, HIGH))] = Direction.BACKWORD
+      self.transition_table[((HIGH, LOW), (HIGH, HIGH))] = Direction.BACKWORD
+      self.transition_table[((LOW, LOW), (HIGH, LOW))] = Direction.BACKWORD
   
   def add_reading(self, sig_0_level, sig_1_level):
     """ notifies the class of a new reading, and returns the forward and backward count.
@@ -50,7 +58,7 @@ class RevolutionCounter():
     Returns:
       all 3 counters.
     """
-    if self.sig_0_level == SignalLevel.UNKNOWN or self.sig_1_level == SignalLevel.UNKNOWN: # init.
+    if self.sig_0_level == SignalLevel.UNKNOWN or self.sig_1_level == SignalLevel.UNKNOWN:
       self.sig_0_level = sig_0_level
       self.sig_1_level = sig_1_level
       self.state = (sig_0_level, sig_1_level)

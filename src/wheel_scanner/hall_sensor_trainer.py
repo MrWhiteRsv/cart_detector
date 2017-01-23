@@ -1,4 +1,4 @@
-import collections
+  """import collections
 import math
 import sys
 
@@ -14,16 +14,16 @@ class HallSensorTrainer():
   LOCAL_SSD_BUFFER_SIZE = 80
   GLOBAL_SSD_BUFFER_SIZE = 10000
   
-  """ state """
+  " "" state "  ""
   activeBuffer = None
   local_ssd_buffer = None
   global_ssd_buffer = None
   
-  """ logging """
+  "" " logging "" "
   logger = None
   sample_index = None
 
-  def __init__(self):
+  "" "def __init__(self):
     self.activeBuffer = collections.deque(maxlen = self.ACTIVE_BUFFER_SIZE)
     self.local_ssd_buffer = collections.deque(maxlen = self.LOCAL_SSD_BUFFER_SIZE)
     self.global_ssd_buffer = collections.deque(maxlen = self.GLOBAL_SSD_BUFFER_SIZE)
@@ -69,7 +69,7 @@ class HallSensorTrainer():
     #res = res + 'ssd_histogram: ' + self.ssd_histogram.to_string() + '\n'
     return res
 
-  """ Logic """
+  " "" Logic " ""
 
   def get_ssd_support(self):
     return {'min': min(self.global_ssd_buffer), 'max': max(self.global_ssd_buffer)}
@@ -91,3 +91,4 @@ class HallSensorTrainer():
       sN = sN + pow((val - avg), 2)
     sN = math.sqrt(sN * 1./(len(self.local_ssd_buffer)))
     return sN
+"""

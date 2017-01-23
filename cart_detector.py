@@ -10,22 +10,23 @@ from src.gps import gps_scanner
 from src.sensehat import sensehat_scanner
 from src.wheel_scanner import wheel_scanner
 
-import src.utils.monitor
 import src.utils.logger
-
-""" returns a thresholds struct for both sensors.  """
-def get_thrsholds():
-  return [{'top_threshold': 2.4393219999999998, 'bottom_threshold': 2.255458},
-   {'top_threshold': 2.4831760000000003, 'bottom_threshold': 2.438824}]
+import src.utils.monitor
+import src.wheel_scanner.trainer
 
 def scan(log_file):
   logger = src.utils.logger.Logger()
   logger.open(run_name = log_file, log_to_mqtt_file = True, log_to_mqtt = False,
       log_to_stdout = False)
+  thrsholds = src.wheel_scanner.trainer.train_cart()
+  
+  print thrsholds
+  return
+  
   gps_scanner_inst = gps_scanner.GpsScanner()
   ble_scanner_inst = ble_scanner.BleScanner()
   # sensehat_scanner_inst = sensehat_scanner.SensehatScanner()
-  wheel_scanner_inst = wheel_scanner.WheelScanner(get_thrsholds())
+  wheel_scanner_inst = wheel_scanner.WheelScanner(thrsholds)
   gps_scanner_inst.open()
   gps_scanner_inst.start(logger)
   ble_scanner_inst.start(logger)

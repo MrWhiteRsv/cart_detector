@@ -1,3 +1,6 @@
+""" This module is responsible to compute a threshold for the Standard Deviation (SD) 
+that will differentiate between times in which the signal is active (rotating wheel) and
+inactive (stationary). """
 
 import src.utils.utils
 import ssd_calculator
