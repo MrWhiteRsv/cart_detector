@@ -10,7 +10,7 @@ import src.utils.logger
 import src.utils.utils
 
 def test():
-  """
+
   # Simple example.
   signal = [0] * 100 + [1, 0] * 100
   if not evaluate_signal(signal, 200, 200):
@@ -105,7 +105,6 @@ def test():
     return False
   if not evaluate_signal(signal, 140, 160, hall_signal_logger = None):  #150
     return False
-  """
   
   # signal BM_3 sensor 0
   logger =  src.utils.logger.Logger()

@@ -56,6 +56,10 @@ class WheelScanner:
     sensor_0_level = SignalLevel.UNKNOWN
     sensor_1_level = SignalLevel.UNKNOWN
     rev_counter = RevolutionCounter()
+    
+    old_0 = None
+    old_1 = None
+    old_sum = 0
     while True:
       if (not getattr(self.worker, "do_run", True)) :
         break;
@@ -72,6 +76,7 @@ class WheelScanner:
       if self.logger:
         self.logger.log_hall_reading(time.time(), sensor_0_val, sensor_1_val,
             self.reading_counter)
+      
       sensor_0_level = self.compute_signal_level(sensor_0_level,
           sensor_0_val, self.sensor_0_bottom_threshold, self.sensor_0_top_threshold)
       sensor_1_level = self.compute_signal_level(sensor_1_level,
@@ -79,6 +84,16 @@ class WheelScanner:
       rev_counter_res = rev_counter.add_reading(sensor_0_level, sensor_1_level)
       src.utils.monitor.show_counter_0(rev_counter_res['forward'])
       src.utils.monitor.show_counter_1(rev_counter_res['backward'])
+
+      if old_0 != sensor_0_level or old_1 != sensor_1_level:
+        old_0 = sensor_0_level 
+        old_1 = sensor_1_level
+        print ('old_0:' ,old_0  ,'old_1:' ,old_1)
+      
+      if old_sum != rev_counter_res['forward'] + rev_counter_res['forward']:
+        old_sum = rev_counter_res['forward'] + rev_counter_res['forward']
+        print('sensor_0_level:', sensor_0_level, 'sensor_1_level:', sensor_1_level)      
+
 
   """ internals """
   def compute_signal_level(self, old_level, sensor_val, bottom_threshold, top_threshold):

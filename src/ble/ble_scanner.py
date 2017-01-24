@@ -23,21 +23,21 @@ class BleScanner:
   
   def color_of_mac(self, mac):
     return {
-        '34:b1:f7:d3:91:c8' : Colors.RED,
+        '34:b1:f7:d3:91:f8' : Colors.RED,
         '34:b1:f7:d3:9c:cb' : Colors.GREEN,
-        '34:b1:f7:d3:91:e4' : Colors.BLUE,
+        '34:b1:f7:d3:9e:2b' : Colors.BLUE,
         '34:b1:f7:d3:9d:eb' : Colors.YELLOW,
-        '34:b1:f7:d3:90:8e' : Colors.PURPLE,
+        '34:b1:f7:d3:90:d9' : Colors.PURPLE,
     }.get(mac, (255, 255, 255))
     
   def start_continous_scan(self):
     # print 'starting continous ble scan'
     supermetric_beacons = {}
-    supermetric_beacons['34:b1:f7:d3:91:c8'] = self.create_beacon_state()
+    supermetric_beacons['34:b1:f7:d3:91:f8'] = self.create_beacon_state()
     supermetric_beacons['34:b1:f7:d3:9c:cb'] = self.create_beacon_state()
-    supermetric_beacons['34:b1:f7:d3:91:e4'] = self.create_beacon_state()
+    supermetric_beacons['34:b1:f7:d3:9e:2b'] = self.create_beacon_state()
     supermetric_beacons['34:b1:f7:d3:9d:eb'] = self.create_beacon_state()
-    supermetric_beacons['34:b1:f7:d3:90:8e'] = self.create_beacon_state()
+    supermetric_beacons['34:b1:f7:d3:90:d9'] = self.create_beacon_state()
     scanner = Scanner()
 
     while True:
@@ -45,12 +45,11 @@ class BleScanner:
         break
       for beacon in scanner.scan():
         fields = beacon.split(",")
-        mac = fields[0]   
+        mac = fields[0]
         if mac in supermetric_beacons:
           time_sec = time.time()
           rssi = int(fields[5])
-          # print ('ble, mac: ', mac, ', rssi: ', rssi)
-          # sys.stdout.flush()
+          print ('ble, mac: ', mac, ', rssi: ', int(fields[5]))
           self.logger.log_ble_raw(mac, time_sec, rssi)
           if rssi > supermetric_beacons[mac]['nearest_rssi']:
             supermetric_beacons[mac]['nearest_ts'] = time_sec

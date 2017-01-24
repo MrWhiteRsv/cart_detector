@@ -37,12 +37,10 @@ class GpsScanner:
     self.worker.join()
 
   def log_scan(self):
-    print 'log_gps_event'
     self.logger.log_gps_event(self.recent_scan_time_utc_sec,
         self.recent_lat, self.recent_lon)
     
   def start_continous_scan(self):
-    print 'starting continous gps scan' 
     gps_socket = gps3.GPSDSocket()
     data_stream = gps3.DataStream()
     gps_socket.connect()
@@ -61,8 +59,6 @@ class GpsScanner:
           print('gps  ', lat, ', ', lon)
         else:
           print 'bad scan'
-          # print(data_stream.TPV) 
-    print 'stopped continous gps scan'   
 
 
       

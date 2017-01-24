@@ -5,7 +5,7 @@ import src.utils.utils
 import test.wheel_scanner
 
 from test.wheel_scanner import activity_threshold_calculator_test
-from test.wheel_scanner import hall_sensor_trainer_test
+#from test.wheel_scanner import hall_sensor_trainer_test
 from test.wheel_scanner import revolution_counter_test
 from test.wheel_scanner import ssd_calculator_test
 from test.wheel_scanner import turn_threshold_evaluator_test
@@ -49,9 +49,9 @@ def main(argv):
   res = histogram_test.HistogramTest().test()
   print('pass' if res else 'fail')
   
-  print ('________ Hall Sensor Trainer Test ________\n')
+  """ print ('________ Hall Sensor Trainer Test ________\n')
   res = hall_sensor_trainer_test.HallSensorTrainerTest().test()
-  print('pass' if res else 'fail')
+  print('pass' if res else 'fail') """
 
 if __name__ == '__main__':
   main(sys.argv[1:])

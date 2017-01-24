@@ -4,24 +4,6 @@ import activity_threshold_calculator
 import ssd_calculator
 import src.utils.utils
 from src.utils import histogram
-
-"""
-def optimize_thresholds_with_revolutions(signal_lst, revolutions):
-  Evaluates the impact of the given thresholds on a signal_lst.
-    
-  Args:
-    signal_lst: Samples of forward moving cart which has both an active and an
-      inactive phase.
-    revolutions: The number of revolutions the cart has done during training.
-  
-  Returns:
-    A dict of the optimized thresholds, such that the most accurate rotation count
-      will be detected. Example
-    {'bottom_threshold' :  3.2, 'top_threshold' : 1.8}
-
-  print ('optimize_thrsholds_with_revolutions')
-  return {}
-"""
     
 def optimize_thresholds(signal_lst, hall_signal_logger = None):
   """ Evaluates the impact of the given thresholds on a signal_lst.
@@ -59,20 +41,15 @@ def optimize_thresholds(signal_lst, hall_signal_logger = None):
   # filter outliers.
   min_bin_value_threshold = sorted_active_values[src.utils.utils.get_prefix_index(
       sorted_active_values, fraction = 0.03)]
-      
   trimmed_active_sample_count = map(
       lambda x: x if x >= min_bin_value_threshold else 0,
       active_signals_histogram.get_sample_counts())
   hist_range = get_historam_range(
       active_signals_histogram.get_bins(), trimmed_active_sample_count)
-
   if hist_range == None:
     return hist_range
-
   (hist_range_bottom, hist_range_top) = hist_range
-     
   range_width = hist_range_top - hist_range_bottom
-  
   if (False): # debug
     print('signal_lst:', signal_lst)
     print('bottom_active_value:', bottom_active_value)
@@ -87,8 +64,8 @@ def optimize_thresholds(signal_lst, hall_signal_logger = None):
     print('hist_range_top: ', hist_range_top)
     print res
 
-  res = {'bottom_threshold' : hist_range_bottom + 0.3 * range_width,
-         'top_threshold' : hist_range_top -  0.3 * range_width}
+  res = {'bottom_threshold' : hist_range_bottom + 0.25 * range_width,
+         'top_threshold' : hist_range_top -  0.25 * range_width}
          
   return res
   

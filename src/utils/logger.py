@@ -13,21 +13,21 @@ class Logger():
   
   do_log_to_txt_files = None
   
-  """ grapher txt files, for debugging purposes. """
+  """ Grapher txt files, for debugging purposes. """
   hall_signal_0_logger = None
   hall_signal_1_logger = None
     
   #hall_file = None
   #hall_turn_file = None
   
-  """ getters """
+  """ Getters. """
   def get_hall_signal_0_logger(self):
     return self.hall_signal_0_logger
 
   def get_hall_signal_1_logger(self):
     return self.hall_signal_1_logger
 
-  """ --- Event logging ---"""
+  """ Event logging. """
     
   def log_gps_event(self, start_time, lat, lon):
     key_val = dict(start_time = start_time, lat = lat, lon = lon)
@@ -63,21 +63,16 @@ class Logger():
     topic = "cart/cartId/revolution"
     self.log_event(topic, key_val)
     
-  """ --- Scan logging ---"""
+  """ Scan logging. """
     
   def log_hall_reading(self, start_time, val_0, val_1, reading_counter):
     key_val = dict(start_time = start_time, val_0 = val_0, val_1 = val_1,
         reading_counter = reading_counter)
     topic = "cart/cartId/hall_reading"
     self.log_event(topic, key_val, bypass_mqtt = True)
-    """ 
-    self.hall0_file.write(str(reading_counter) + ', ' + str(val_0) + '\n')
-    self.hall1_file.write(str(reading_counter) + ', ' + str(val_1) + '\n')
-    """
-    
-  """ --- Training Logging ---"""
 
-  """ --- Implementation functions ---"""
+
+  """ Internals. """
    
   def open(self, run_name = 'test_run', log_to_mqtt_file = False,
       log_to_mqtt = False, log_to_stdout = True, log_to_txt_files = False):
@@ -89,22 +84,14 @@ class Logger():
     self.do_log_to_txt_files = log_to_txt_files
     if (self.do_log_to_txt_files):
       assert run_name and len(run_name) > 0, 'missing run name'
-      # self.hall_file = open(run_name + '_hall_file.txt', 'w')
-      # self.hall_turn_file = open(run_name + '_hall_turn_file.txt', 'w')
       self.hall_signal_0_logger = hall_signal_logger.HallSignalLogger()
       self.hall_signal_1_logger = hall_signal_logger.HallSignalLogger()
       self.hall_signal_0_logger.open(run_name + '_signal_0')
       self.hall_signal_1_logger.open(run_name + '_signal_1')
-            
     self.do_log_to_mqtt_file = log_to_mqtt_file
     self.do_log_to_mqtt = log_to_mqtt
     self.do_log_to_stdout = log_to_stdout
-    
     dir = os.path.dirname(__file__)
-    # hall0_training_file_name = os.path.join(dir, '../logging/hall_0.txt')
-    # self.hall0_training_file = open(hall0_training_file_name, 'w')
-    # hall0_training_filtered_file_name = os.path.join(dir, '../logging/hall_0_filtered.txt')
-    # self.hall0_training_filtered_file = open(hall0_training_filtered_file_name, 'w')
     
   def close(self):
     self.mqtt_log_file.close()
@@ -128,8 +115,11 @@ class Logger():
   def log_to_mqtt(self, topic, payload):
     if not self.do_log_to_mqtt:
       return
-    hostname = "li1109-31.members.linode.com"
-    publish.single(topic, payload, hostname=hostname) 
+    hostname = 'm13.cloudmqtt.com'
+    auth = {'username':"oujibpyy", 'password':"-mKBDKwYQ1CC"}
+    publish.single(topic, payload, hostname=hostname, auth=auth, port=11714) 
+    # hostname = "li1109-31.members.linode.com"
+    # publish.single(topic, payload, hostname=hostname) 
     
   def log_to_mqtt_file(self, payload):
     if not self.do_log_to_mqtt_file:
