@@ -12,12 +12,17 @@ class RevolutionCounter():
   def __init__(self):
     LOW = SignalLevel.LOW
     HIGH = SignalLevel.HIGH
+
     self.forward_revolutions = 0
     self.backward_revolutions = 0
     self.illegeal_transition = 0
+
     self.direction = Direction.UNKNOWN
     self.sig_0_level = SignalLevel.UNKNOWN
     self.sig_1_level = SignalLevel.UNKNOWN
+    
+    self.consecutive_legal_shifts = 0
+    
     self.state = None
     self.transition_table = {}
     if False:
@@ -67,11 +72,19 @@ class RevolutionCounter():
       if (new_state != self.state):
         if not (self.state, new_state) in self.transition_table:
           self.illegeal_transition = self.illegeal_transition + 1
+          self.consecutive_legal_shifts = 0
         else:
-          if self.transition_table[(self.state, new_state)] == Direction.FORWARD:
-            self.forward_revolutions = self.forward_revolutions + 1
+          new_direction = self.transition_table[(self.state, new_state)]
+          if (self.direction == new_direction):
+            self.consecutive_legal_shifts = self.consecutive_legal_shifts + 1
+            if self.consecutive_legal_shifts % 4 == 0:
+              if self.transition_table[(self.state, new_state)] == Direction.FORWARD:
+                self.forward_revolutions = self.forward_revolutions + 1
+              else:
+                self.backward_revolutions = self.backward_revolutions + 1
           else:
-            self.backward_revolutions = self.backward_revolutions + 1
+            self.consecutive_legal_shifts = 1 # Just shifted to the reverse direction.
+            self.direction = new_direction
       self.state = new_state 
     return {
       'forward' : self.forward_revolutions,

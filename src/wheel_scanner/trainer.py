@@ -67,14 +67,15 @@ def evaluate_quality(signal_0, signal_1, thresholds, logger):
   print('evaluation1:', evaluation_1)
   
 def wait_for_start():
-  start_training_beacon = '34:b1:f7:d3:9c:cb'
+  start_training_beacon = '34:b1:f7:d3:91:f8'
   scanner = Scanner()
   continue_scan = True
   while continue_scan:
     for beacon in scanner.scan():
       fields = beacon.split(",")
-      mac = fields[0]   
+      mac = fields[0]
       if mac == start_training_beacon:
+        # print ('ble, mac: ', mac, ', rssi: ', int(fields[5]))
         rssi = int(fields[5])
         if rssi > -67:
           continue_scan = False

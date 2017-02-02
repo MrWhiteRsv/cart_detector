@@ -85,14 +85,13 @@ class WheelScanner:
       src.utils.monitor.show_counter_0(rev_counter_res['forward'])
       src.utils.monitor.show_counter_1(rev_counter_res['backward'])
 
-      if old_0 != sensor_0_level or old_1 != sensor_1_level:
+      """if old_0 != sensor_0_level or old_1 != sensor_1_level:
         old_0 = sensor_0_level 
         old_1 = sensor_1_level
-        print ('old_0:' ,old_0  ,'old_1:' ,old_1)
-      
+        print ('old_0:' ,old_0  ,'old_1:' ,old_1) 
       if old_sum != rev_counter_res['forward'] + rev_counter_res['forward']:
         old_sum = rev_counter_res['forward'] + rev_counter_res['forward']
-        print('sensor_0_level:', sensor_0_level, 'sensor_1_level:', sensor_1_level)      
+        print('sensor_0_level:', sensor_0_level, 'sensor_1_level:', sensor_1_level)   """   
 
 
   """ internals """

@@ -56,9 +56,9 @@ class GpsScanner:
           self.recent_lat = lat
           self.recent_lon = lon
           self.recent_scan_time_utc_sec = time.time()
-          print('gps  ', lat, ', ', lon)
-        else:
-          print 'bad scan'
+          # print('gps  ', lat, ', ', lon)
+        #else:
+          # print 'bad scan'
 
 
       
