@@ -1,6 +1,6 @@
-""" 
-This module is responsible for the to count forward and backward revolutios based on signal
-levels. It also retruns feedback regarding the synchronization behavior of both counters.
+"""  Count forward and backward revolutios based on signal levels. 
+
+It also retruns feedback regarding the synchronization behavior of both counters.
 """ 
 
 from enum import Enum
@@ -13,8 +13,8 @@ class RevolutionCounter():
     LOW = SignalLevel.LOW
     HIGH = SignalLevel.HIGH
 
-    self.forward_revolutions = 0
-    self.backward_revolutions = 0
+    self.forward_revolutions_counter = 0
+    self.backward_revolutions_counter = 0
     self.illegeal_transition = 0
 
     self.direction = Direction.UNKNOWN
@@ -25,21 +25,16 @@ class RevolutionCounter():
     
     self.state = None
     self.transition_table = {}
-    if False:
-      self.transition_table[((LOW, LOW), (HIGH, LOW))] = Direction.FORWARD
-      self.transition_table[((HIGH, LOW), (HIGH, HIGH))] = Direction.FORWARD
-      self.transition_table[((HIGH, HIGH), (LOW, HIGH))] = Direction.FORWARD
-      self.transition_table[((LOW, HIGH), (LOW, LOW))] = Direction.FORWARD
-    else:
-      self.transition_table[((LOW, LOW), (LOW, HIGH))] = Direction.FORWARD
-      self.transition_table[((LOW, HIGH), (HIGH, HIGH))] = Direction.FORWARD
-      self.transition_table[((HIGH, HIGH), (HIGH, LOW))] = Direction.FORWARD
-      self.transition_table[((HIGH, LOW), (LOW, LOW))] = Direction.FORWARD
+
+    self.transition_table[((LOW, LOW), (LOW, HIGH))] = Direction.FORWARD
+    self.transition_table[((LOW, HIGH), (HIGH, HIGH))] = Direction.FORWARD
+    self.transition_table[((HIGH, HIGH), (HIGH, LOW))] = Direction.FORWARD
+    self.transition_table[((HIGH, LOW), (LOW, LOW))] = Direction.FORWARD
     
-      self.transition_table[((LOW, HIGH), (LOW, LOW))] = Direction.BACKWORD
-      self.transition_table[((HIGH, HIGH), (LOW, HIGH))] = Direction.BACKWORD
-      self.transition_table[((HIGH, LOW), (HIGH, HIGH))] = Direction.BACKWORD
-      self.transition_table[((LOW, LOW), (HIGH, LOW))] = Direction.BACKWORD
+    self.transition_table[((LOW, HIGH), (LOW, LOW))] = Direction.BACKWORD
+    self.transition_table[((HIGH, HIGH), (LOW, HIGH))] = Direction.BACKWORD
+    self.transition_table[((HIGH, LOW), (HIGH, HIGH))] = Direction.BACKWORD
+    self.transition_table[((LOW, LOW), (HIGH, LOW))] = Direction.BACKWORD
   
   def add_reading(self, sig_0_level, sig_1_level):
     """ notifies the class of a new reading, and returns the forward and backward count.
@@ -63,6 +58,8 @@ class RevolutionCounter():
     Returns:
       all 3 counters.
     """
+    completed_forward_revolution = False
+    completed_backward_revolution = False
     if self.sig_0_level == SignalLevel.UNKNOWN or self.sig_1_level == SignalLevel.UNKNOWN:
       self.sig_0_level = sig_0_level
       self.sig_1_level = sig_1_level
@@ -79,17 +76,21 @@ class RevolutionCounter():
             self.consecutive_legal_shifts = self.consecutive_legal_shifts + 1
             if self.consecutive_legal_shifts % 4 == 0:
               if self.transition_table[(self.state, new_state)] == Direction.FORWARD:
-                self.forward_revolutions = self.forward_revolutions + 1
+                completed_forward_revolution = True
+                self.forward_revolutions_counter = self.forward_revolutions_counter + 1
               else:
-                self.backward_revolutions = self.backward_revolutions + 1
+                completed_backward_revolution = True
+                self.backward_revolutions_counter = self.backward_revolutions_counter + 1
           else:
             self.consecutive_legal_shifts = 1 # Just shifted to the reverse direction.
             self.direction = new_direction
       self.state = new_state 
     return {
-      'forward' : self.forward_revolutions,
-      'backward' : self.backward_revolutions,
-      'illegeal' : self.illegeal_transition
+      'forward_revolutions_counter' : self.forward_revolutions_counter,
+      'backward_revolutions_counter' : self.backward_revolutions_counter,
+      'illegeal_transition' : self.illegeal_transition,
+      'completed_forward_revolution' : completed_forward_revolution,
+      'completed_backward_revolution' : completed_backward_revolution,
     }
 
 """ internals """

@@ -1,4 +1,12 @@
-# Responsible for starting and stopping the different scanners 
+""" Entry point for the entire cart scanner.
+
+This module is responsible for
+  1. Training the wheel scanner.
+  2. Allocating a logger.
+  3. Relaying the logger to these scanners.
+  4. Starting and stopping the different scanners.
+
+"""
 
 import getopt
 import sys
@@ -19,9 +27,8 @@ def scan(log_file):
   training_logger.open(run_name = log_file + '_training', log_to_mqtt_file = False,
       log_to_mqtt = False, log_to_stdout = False, log_to_txt_files = True)  
   #thresholds = src.wheel_scanner.trainer.train_cart(training_logger)
-  #thresholds = [{'top_threshold': 2.456758, 'bottom_threshold': 2.279182}, {'top_threshold': 2.435494, 'bottom_threshold': 2.384926}]
-  thresholds = [{'top_threshold': 2.41948, 'bottom_threshold': 2.19916}, {'top_threshold': 2.3839, 'bottom_threshold': 2.3209}]
-  #print thresholds
+  thresholds = [{'top_threshold': 2.56648, 'bottom_threshold': 2.15752}, {'top_threshold': 2.5726299999999998, 'bottom_threshold': 2.1522099999999997}]
+  print thresholds
   #return
     
   logger = src.utils.logger.Logger()

@@ -12,8 +12,6 @@ class WheelScanner:
  
   worker = None
   logger = None
-  forward_counter = None
-  backward_counter = None
   reading_counter = None
   sensor_0_bottom_threshold = 0
   sensor_0_top_threshold = 5
@@ -38,8 +36,6 @@ class WheelScanner:
   def start(self, logger, store_in_memory = False, monitor_wheel_turns = True):
     self.logger = logger
     self.worker = threading.Thread(target = self.start_continous_scan)
-    self.forward_counter = 0
-    self.backward_counter = 0
     self.reading_counter = 0
     self.worker.do_run = True 
     if store_in_memory:
@@ -56,10 +52,7 @@ class WheelScanner:
     sensor_0_level = SignalLevel.UNKNOWN
     sensor_1_level = SignalLevel.UNKNOWN
     rev_counter = RevolutionCounter()
-    
-    old_0 = None
-    old_1 = None
-    old_sum = 0
+
     while True:
       if (not getattr(self.worker, "do_run", True)) :
         break;
@@ -82,17 +75,14 @@ class WheelScanner:
       sensor_1_level = self.compute_signal_level(sensor_1_level,
           sensor_1_val, self.sensor_1_bottom_threshold, self.sensor_1_top_threshold)
       rev_counter_res = rev_counter.add_reading(sensor_0_level, sensor_1_level)
-      src.utils.monitor.show_counter_0(rev_counter_res['forward'])
-      src.utils.monitor.show_counter_1(rev_counter_res['backward'])
-
-      """if old_0 != sensor_0_level or old_1 != sensor_1_level:
-        old_0 = sensor_0_level 
-        old_1 = sensor_1_level
-        print ('old_0:' ,old_0  ,'old_1:' ,old_1) 
-      if old_sum != rev_counter_res['forward'] + rev_counter_res['forward']:
-        old_sum = rev_counter_res['forward'] + rev_counter_res['forward']
-        print('sensor_0_level:', sensor_0_level, 'sensor_1_level:', sensor_1_level)   """   
-
+      forward_counter = rev_counter_res['forward_revolutions_counter']
+      backward_counter = rev_counter_res['backward_revolutions_counter']
+      src.utils.monitor.show_counter_0(forward_counter)
+      src.utils.monitor.show_counter_1(backward_counter)
+      if (rev_counter_res['completed_forward_revolution'] or
+          rev_counter_res['completed_backward_revolution']):
+        if self.logger:
+          self.logger.log_turn_event(time.time(), forward_counter, backward_counter)
 
   """ internals """
   def compute_signal_level(self, old_level, sensor_val, bottom_threshold, top_threshold):
