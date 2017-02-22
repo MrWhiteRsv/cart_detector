@@ -49,7 +49,8 @@ class BleScanner:
         if mac in supermetric_beacons:
           time_sec = time.time()
           rssi = int(fields[5])
-          # print ('ble, mac: ', mac, ', rssi: ', int(fields[5]))
+          if mac == '34:b1:f7:d3:9c:cb':
+            print ('ble, mac: ', mac, ', rssi: ', int(fields[5]))
           self.logger.log_ble_raw(mac, time_sec, rssi)
           if rssi > supermetric_beacons[mac]['nearest_rssi']:
             supermetric_beacons[mac]['nearest_ts'] = time_sec
@@ -60,7 +61,7 @@ class BleScanner:
           if gotCloseToBeacon or gotAwayFromBeacon:
             supermetric_beacons[mac]['end_ts'] = time_sec
             if gotCloseToBeacon:
-              # print 'got close to beacon: ', mac, ' at time:' , time_sec
+              print ('got close to beacon: ', mac, ' at time:' , time_sec)
               # self.monitor.notify_beacon(self.color_of_mac(mac))
               src.utils.monitor.show_beacon_on(self.color_of_mac(mac))
               supermetric_beacons[mac]['near_beacon'] = True
@@ -70,7 +71,7 @@ class BleScanner:
                   supermetric_beacons[mac]['end_ts'],
                   supermetric_beacons[mac]['nearest_ts'],
                   supermetric_beacons[mac]['nearest_rssi'])
-              # print 'got away from beacon: ', mac, ' at time: ' , time_sec
+              print ('got away from beacon: ', mac, ' at time: ' , time_sec)
               src.utils.monitor.show_beacon_off()
               supermetric_beacons[mac]['near_beacon'] = False
             supermetric_beacons[mac]['start_ts'] = time_sec

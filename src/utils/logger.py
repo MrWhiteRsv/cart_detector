@@ -38,6 +38,7 @@ class Logger():
     key_val = dict(mac = mac, start_time = start_time, end_time = end_time,
         nearest_time = nearest_time, nearest_rssi = nearest_rssi)   
     topic = "cart/cartId/ble"
+    print('log_ble_event: ' , mac)
     self.log_event(topic, key_val)
             
   def log_ble_raw(self, mac, time_sec, rssi):
@@ -55,9 +56,11 @@ class Logger():
     topic = "cart/cartId/raw_gyro"
     self.log_event(topic, key_val, bypass_mqtt = True)
     
-  def log_turn_event(self, start_time, forward_counter, backward_counter):
+  def log_turn_event(self, start_time, forward_counter, backward_counter,
+      forward_revolution):
     key_val = dict(
         start_time = start_time,
+        forward_revolution = forward_revolution,
         forward_counter = forward_counter,
         backward_counter = backward_counter)
     topic = "cart/cartId/revolution"
@@ -101,6 +104,7 @@ class Logger():
           
   def log_event(self, topic, key_val, bypass_mqtt = False):
     if not bypass_mqtt:
+      # print (topic)
       self.log_to_mqtt(topic, json.dumps(key_val))
     key_val['topic'] = topic
     payload = json.dumps(key_val)
@@ -117,7 +121,7 @@ class Logger():
       return
     hostname = 'm13.cloudmqtt.com'
     auth = {'username':"oujibpyy", 'password':"-mKBDKwYQ1CC"}
-    publish.single(topic, payload, hostname=hostname, auth=auth, port=11714) 
+    publish.single(topic, payload, hostname=hostname, auth=auth, port=11714)
     # hostname = "li1109-31.members.linode.com"
     # publish.single(topic, payload, hostname=hostname) 
     

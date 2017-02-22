@@ -33,7 +33,7 @@ def scan(log_file):
     
   logger = src.utils.logger.Logger()
   logger.open(run_name = log_file, log_to_mqtt_file = True,
-      log_to_mqtt = False, log_to_stdout = False, log_to_txt_files = True)  
+      log_to_mqtt = True, log_to_stdout = False, log_to_txt_files = True)  
   
   gps_scanner_inst = gps_scanner.GpsScanner()
   ble_scanner_inst = ble_scanner.BleScanner()

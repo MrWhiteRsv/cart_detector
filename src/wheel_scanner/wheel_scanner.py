@@ -82,7 +82,8 @@ class WheelScanner:
       if (rev_counter_res['completed_forward_revolution'] or
           rev_counter_res['completed_backward_revolution']):
         if self.logger:
-          self.logger.log_turn_event(time.time(), forward_counter, backward_counter)
+          self.logger.log_turn_event(time.time(), forward_counter, backward_counter,
+              rev_counter_res['completed_forward_revolution'])
 
   """ internals """
   def compute_signal_level(self, old_level, sensor_val, bottom_threshold, top_threshold):
