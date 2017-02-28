@@ -56,8 +56,8 @@ class BleScanner:
             supermetric_beacons[mac]['nearest_ts'] = time_sec
             supermetric_beacons[mac]['nearest_rssi'] = rssi 
           supermetric_beacons[mac]['end_ts'] = time_sec
-          gotCloseToBeacon = (rssi > -67 and not supermetric_beacons[mac]['near_beacon'] == True)
-          gotAwayFromBeacon = (rssi < -78 and not supermetric_beacons[mac]['near_beacon'] == False)
+          gotCloseToBeacon = (rssi > -50 and not supermetric_beacons[mac]['near_beacon'] == True)
+          gotAwayFromBeacon = (rssi < -72 and not supermetric_beacons[mac]['near_beacon'] == False)
           if gotCloseToBeacon or gotAwayFromBeacon:
             supermetric_beacons[mac]['end_ts'] = time_sec
             if gotCloseToBeacon:

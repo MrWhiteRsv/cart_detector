@@ -27,7 +27,9 @@ def scan(log_file):
   training_logger.open(run_name = log_file + '_training', log_to_mqtt_file = False,
       log_to_mqtt = False, log_to_stdout = False, log_to_txt_files = True)  
   #thresholds = src.wheel_scanner.trainer.train_cart(training_logger)
-  thresholds = [{'top_threshold': 2.56648, 'bottom_threshold': 2.15752}, {'top_threshold': 2.5726299999999998, 'bottom_threshold': 2.1522099999999997}]
+  #thresholds = [{'top_threshold': 2.56648, 'bottom_threshold': 2.15752}, {'top_threshold': 2.5726299999999998, 'bottom_threshold': 2.1522099999999997}]
+  #thresholds = [{'top_threshold': 2.74027, 'bottom_threshold': 2.30809}, {'top_threshold': 2.640295, 'bottom_threshold': 2.200765}]
+  thresholds = [{'top_threshold': 2.7380649999999997, 'bottom_threshold': 2.3073550000000003}, {'top_threshold': 2.636935, 'bottom_threshold': 2.185645}]
   print thresholds
   #return
     

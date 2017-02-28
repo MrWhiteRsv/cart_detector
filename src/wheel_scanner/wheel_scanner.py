@@ -59,7 +59,7 @@ class WheelScanner:
       self.reading_counter = self.reading_counter + 1
       sensor_0_val = analog.read(0)
       sensor_1_val = analog.read(1)
-      # print ('sensor_0_val', sensor_0_val)
+      # print ('sensor_0_val', sensor_0_val, 'sensor_1_val', sensor_1_val)
       if self.logger != None:
         self.logger.get_hall_signal_0_logger().log_raw_signal_lst([sensor_0_val])
         self.logger.get_hall_signal_1_logger().log_raw_signal_lst([sensor_1_val])
