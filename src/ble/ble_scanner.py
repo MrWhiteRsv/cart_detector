@@ -49,8 +49,8 @@ class BleScanner:
         if mac in supermetric_beacons:
           time_sec = time.time()
           rssi = int(fields[5])
-          if mac == '34:b1:f7:d3:9c:cb':
-            print ('ble, mac: ', mac, ', rssi: ', int(fields[5]))
+          #if mac == '34:b1:f7:d3:9c:cb':
+          #  print ('ble, mac: ', mac, ', rssi: ', int(fields[5]))
           self.logger.log_ble_raw(mac, time_sec, rssi)
           if rssi > supermetric_beacons[mac]['nearest_rssi']:
             supermetric_beacons[mac]['nearest_ts'] = time_sec

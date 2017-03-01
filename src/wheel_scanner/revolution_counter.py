@@ -58,6 +58,8 @@ class RevolutionCounter():
     Returns:
       all 3 counters.
     """
+    return self.temp_add_reading(sig_0_level, sig_1_level)
+    
     completed_forward_revolution = False
     completed_backward_revolution = False
     if self.sig_0_level == SignalLevel.UNKNOWN or self.sig_1_level == SignalLevel.UNKNOWN:
@@ -67,6 +69,7 @@ class RevolutionCounter():
     else:  # passed init.
       new_state = (sig_0_level, sig_1_level)
       if (new_state != self.state):
+        print ('new_state: ', new_state)
         if not (self.state, new_state) in self.transition_table:
           self.illegeal_transition = self.illegeal_transition + 1
           self.consecutive_legal_shifts = 0
@@ -92,7 +95,24 @@ class RevolutionCounter():
       'completed_forward_revolution' : completed_forward_revolution,
       'completed_backward_revolution' : completed_backward_revolution,
     }
-
+    
+  def temp_add_reading(self, sig_0_level, sig_1_level):
+    completed_forward_revolution = False
+    completed_backward_revolution = False
+    if self.sig_0_level == SignalLevel.UNKNOWN:
+      self.sig_0_level = sig_0_level
+    if not self.sig_0_level == sig_0_level:
+      completed_forward_revolution = True
+      self.sig_0_level = sig_0_level
+      self.forward_revolutions_counter = self.forward_revolutions_counter + 1
+    return {
+      'forward_revolutions_counter' : self.forward_revolutions_counter,
+      'backward_revolutions_counter' : self.backward_revolutions_counter,
+      'illegeal_transition' : self.illegeal_transition,
+      'completed_forward_revolution' : completed_forward_revolution,
+      'completed_backward_revolution' : completed_backward_revolution,
+    }
+          
 """ internals """
 class Direction(Enum):
   UNKNOWN = 1
