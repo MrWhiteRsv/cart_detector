@@ -58,7 +58,7 @@ class RevolutionCounter():
     Returns:
       all 3 counters.
     """
-    return self.temp_add_reading(sig_0_level, sig_1_level)
+    return self.temp_add_reading(sig_1_level)
     
     completed_forward_revolution = False
     completed_backward_revolution = False
@@ -96,14 +96,14 @@ class RevolutionCounter():
       'completed_backward_revolution' : completed_backward_revolution,
     }
     
-  def temp_add_reading(self, sig_0_level, sig_1_level):
+  def temp_add_reading(self, sig_level):
     completed_forward_revolution = False
     completed_backward_revolution = False
     if self.sig_0_level == SignalLevel.UNKNOWN:
-      self.sig_0_level = sig_0_level
-    if not self.sig_0_level == sig_0_level:
+      self.sig_0_level = sig_level
+    if not self.sig_0_level == sig_level:
       completed_forward_revolution = True
-      self.sig_0_level = sig_0_level
+      self.sig_0_level = sig_level
       self.forward_revolutions_counter = self.forward_revolutions_counter + 1
     return {
       'forward_revolutions_counter' : self.forward_revolutions_counter,
