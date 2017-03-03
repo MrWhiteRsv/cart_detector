@@ -6,20 +6,44 @@ import hall_signal_logger
 
 class Logger():
 
+  mqtt_interface = None
   mqtt_log_file = None
   do_log_to_mqtt_file = None
   do_log_to_mqtt = None
   do_log_to_stdout = None
-  
   do_log_to_txt_files = None
   
+  def __init__(self, run_name = 'test_run', log_to_mqtt_file = False,
+      mqtt_interface = None, log_to_mqtt = False, log_to_stdout = True,
+      log_to_txt_files = False):
+    
+    if (log_to_mqtt_file):
+      assert run_name and len(run_name) > 0, 'missing run name'
+      mqtt_log_file_name = run_name + '.dat'
+      self.mqtt_interface = mqtt_interface
+      self.mqtt_log_file = open(mqtt_log_file_name, 'w')
+    self.do_log_to_txt_files = log_to_txt_files
+    if (self.do_log_to_txt_files):
+      assert run_name and len(run_name) > 0, 'missing run name'
+      self.hall_signal_0_logger = hall_signal_logger.HallSignalLogger()
+      self.hall_signal_1_logger = hall_signal_logger.HallSignalLogger()
+      self.hall_signal_0_logger.open(run_name + '_signal_0')
+      self.hall_signal_1_logger.open(run_name + '_signal_1')
+    self.do_log_to_mqtt_file = log_to_mqtt_file
+    self.do_log_to_mqtt = log_to_mqtt
+    self.do_log_to_stdout = log_to_stdout
+    dir = os.path.dirname(__file__)
+    
+  def close(self):
+    self.mqtt_log_file.close()
+    self.mqtt_log_file = None
+    self.hall_signal_0_logger.close()
+    self.hall_signal_1_logger.close()
+    
   """ Grapher txt files, for debugging purposes. """
   hall_signal_0_logger = None
   hall_signal_1_logger = None
     
-  #hall_file = None
-  #hall_turn_file = None
-  
   """ Getters. """
   def get_hall_signal_0_logger(self):
     return self.hall_signal_0_logger
@@ -76,31 +100,6 @@ class Logger():
 
 
   """ Internals. """
-   
-  def open(self, run_name = 'test_run', log_to_mqtt_file = False,
-      log_to_mqtt = False, log_to_stdout = True, log_to_txt_files = False):
-      
-    if (log_to_mqtt_file):
-      assert run_name and len(run_name) > 0, 'missing run name'
-      mqtt_log_file_name = run_name + '.dat'
-      self.mqtt_log_file = open(mqtt_log_file_name, 'w')
-    self.do_log_to_txt_files = log_to_txt_files
-    if (self.do_log_to_txt_files):
-      assert run_name and len(run_name) > 0, 'missing run name'
-      self.hall_signal_0_logger = hall_signal_logger.HallSignalLogger()
-      self.hall_signal_1_logger = hall_signal_logger.HallSignalLogger()
-      self.hall_signal_0_logger.open(run_name + '_signal_0')
-      self.hall_signal_1_logger.open(run_name + '_signal_1')
-    self.do_log_to_mqtt_file = log_to_mqtt_file
-    self.do_log_to_mqtt = log_to_mqtt
-    self.do_log_to_stdout = log_to_stdout
-    dir = os.path.dirname(__file__)
-    
-  def close(self):
-    self.mqtt_log_file.close()
-    self.mqtt_log_file = None
-    self.hall_signal_0_logger.close()
-    self.hall_signal_1_logger.close()
           
   def log_event(self, topic, key_val, bypass_mqtt = False):
     if not bypass_mqtt:
@@ -119,9 +118,10 @@ class Logger():
   def log_to_mqtt(self, topic, payload):
     if not self.do_log_to_mqtt:
       return
-    hostname = 'm13.cloudmqtt.com'
-    auth = {'username':"oujibpyy", 'password':"-mKBDKwYQ1CC"}
-    publish.single(topic, payload, hostname=hostname, auth=auth, port=11714)
+    self.mqtt_interface.publish(topic, payload)
+    #hostname = 'm13.cloudmqtt.com'
+    #auth = {'username':"oujibpyy", 'password':"-mKBDKwYQ1CC"}
+    #publish.single(topic, payload, hostname=hostname, auth=auth, port=11714)
     # hostname = "li1109-31.members.linode.com"
     # publish.single(topic, payload, hostname=hostname) 
     

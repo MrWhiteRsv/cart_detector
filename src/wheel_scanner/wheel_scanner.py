@@ -59,7 +59,7 @@ class WheelScanner:
       self.reading_counter = self.reading_counter + 1
       sensor_0_val = analog.read(0)
       sensor_1_val = analog.read(1)
-      print ('sensor_0_val', sensor_0_val, 'sensor_1_val', sensor_1_val)
+      #print ('sensor_0_val', sensor_0_val, 'sensor_1_val', sensor_1_val)
       if self.logger != None:
         self.logger.get_hall_signal_0_logger().log_raw_signal_lst([sensor_0_val])
         self.logger.get_hall_signal_1_logger().log_raw_signal_lst([sensor_1_val])
@@ -79,7 +79,7 @@ class WheelScanner:
       forward_counter = rev_counter_res['forward_revolutions_counter']
       backward_counter = rev_counter_res['backward_revolutions_counter']
       
-      print ('forward_counter', forward_counter, 'backward_counter', backward_counter)      
+      # ('forward_counter', forward_counter, 'backward_counter', backward_counter)      
       src.utils.monitor.show_counter_0(backward_counter)
       src.utils.monitor.show_counter_1(forward_counter)
       if (rev_counter_res['completed_forward_revolution'] or

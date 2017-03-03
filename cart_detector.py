@@ -20,24 +20,27 @@ from src.wheel_scanner import wheel_scanner
 
 import src.utils.logger
 import src.utils.monitor
+import src.utils.mqtt_interface
 import src.wheel_scanner.trainer
 
 def scan(log_file):
-  training_logger = src.utils.logger.Logger()
-  training_logger.open(run_name = log_file + '_training', log_to_mqtt_file = False,
-      log_to_mqtt = False, log_to_stdout = False, log_to_txt_files = True)  
+  mqtt_interface = src.utils.mqtt_interface.MqttInterface()
+  mqtt_interface.connect()
+  mqtt_interface.publish('cart/cartId/test', 'hello mqtt pi')
+  # mqtt_interface.publish(topic='cart/cartId/test', payload = 'hello mqtt pi')
+  training_logger = src.utils.logger.Logger(run_name = log_file + '_training',
+      log_to_mqtt_file = False, mqtt_interface = mqtt_interface, log_to_mqtt = False,
+      log_to_stdout = False, log_to_txt_files = True)  
   #thresholds = src.wheel_scanner.trainer.train_cart(training_logger)
   #thresholds = [{'top_threshold': 2.56648, 'bottom_threshold': 2.15752}, {'top_threshold': 2.5726299999999998, 'bottom_threshold': 2.1522099999999997}]
   #thresholds = [{'top_threshold': 2.7380649999999997, 'bottom_threshold': 2.3073550000000003}, {'top_threshold': 2.636935, 'bottom_threshold': 2.185645}]
-  thresholds = [{'top_threshold': 2.69, 'bottom_threshold': 2.23}, {'top_threshold': 2.61, 'bottom_threshold': 2.16}]
-  
+  thresholds = [{'top_threshold': 2.69, 'bottom_threshold': 2.23},
+      {'top_threshold': 2.61, 'bottom_threshold': 2.16}]
   print thresholds
-  #return
     
-  logger = src.utils.logger.Logger()
-  logger.open(run_name = log_file, log_to_mqtt_file = True,
-      log_to_mqtt = True, log_to_stdout = False, log_to_txt_files = True)  
-  
+  logger = src.utils.logger.Logger(run_name = log_file, log_to_mqtt_file = True,
+      mqtt_interface = mqtt_interface, log_to_mqtt = True, log_to_stdout = False,
+      log_to_txt_files = True)  
   #gps_scanner_inst = gps_scanner.GpsScanner()
   ble_scanner_inst = ble_scanner.BleScanner()
   # sensehat_scanner_inst = sensehat_scanner.SensehatScanner()
