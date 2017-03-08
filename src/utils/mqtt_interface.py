@@ -9,10 +9,10 @@ class MqttInterface:
   client = None
   connection_statuts = None
 
-  def connect(self):
+  def connect(self, on_message_callback):
     self.client = mqtt.Client()
     self.client.on_connect = self.on_connect
-    self.client.on_message = self.on_message
+    self.client.on_message = on_message_callback #self.on_message
     hostname = 'm13.cloudmqtt.com'
     self.client.username_pw_set(username = "oujibpyy", password = "-mKBDKwYQ1CC");
     self.client.connect(host = hostname, port = 11714)
@@ -46,8 +46,8 @@ class MqttInterface:
     # client.subscribe("$SYS/#")
 
   # The callback for when a PUBLISH message is received from the server.
-  def on_message(self, client, userdata, msg):
-    print(msg.topic + " " + str(msg.payload))
+ # def on_message(self, client, userdata, msg):
+ #   print(msg.topic + " " + str(msg.payload))
     
   def main_loop(self):
     self.client.loop_forever()

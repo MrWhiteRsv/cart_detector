@@ -9,6 +9,7 @@ This module is responsible for
 """
 
 import getopt
+import json
 import sys
 from threading import Timer
 import time
@@ -23,39 +24,49 @@ import src.utils.monitor
 import src.utils.mqtt_interface
 import src.wheel_scanner.trainer
 
-def scan(log_file):
-  mqtt_interface = src.utils.mqtt_interface.MqttInterface()
-  mqtt_interface.connect()
-  mqtt_interface.publish('cart/cartId/test', 'hello mqtt pi')
-  # mqtt_interface.publish(topic='cart/cartId/test', payload = 'hello mqtt pi')
-  training_logger = src.utils.logger.Logger(run_name = log_file + '_training',
-      log_to_mqtt_file = False, mqtt_interface = mqtt_interface, log_to_mqtt = False,
-      log_to_stdout = False, log_to_txt_files = True)  
-  #thresholds = src.wheel_scanner.trainer.train_cart(training_logger)
-  #thresholds = [{'top_threshold': 2.56648, 'bottom_threshold': 2.15752}, {'top_threshold': 2.5726299999999998, 'bottom_threshold': 2.1522099999999997}]
-  #thresholds = [{'top_threshold': 2.7380649999999997, 'bottom_threshold': 2.3073550000000003}, {'top_threshold': 2.636935, 'bottom_threshold': 2.185645}]
-  thresholds = [{'top_threshold': 2.69, 'bottom_threshold': 2.23},
-      {'top_threshold': 2.61, 'bottom_threshold': 2.16}]
-  print thresholds
-    
-  logger = src.utils.logger.Logger(run_name = log_file, log_to_mqtt_file = True,
-      mqtt_interface = mqtt_interface, log_to_mqtt = True, log_to_stdout = False,
-      log_to_txt_files = True)  
-  #gps_scanner_inst = gps_scanner.GpsScanner()
-  ble_scanner_inst = ble_scanner.BleScanner()
-  # sensehat_scanner_inst = sensehat_scanner.SensehatScanner()
-  wheel_scanner_inst = wheel_scanner.WheelScanner(thresholds)
-  #gps_scanner_inst.open()
-  #gps_scanner_inst.start(logger)
-  ble_scanner_inst.start(logger)
-  wheel_scanner_inst.start(logger)
-  time.sleep(3600)
-  wheel_scanner_inst.stop()
-  # sensehat_scanner_inst.stop()
-  ble_scanner_inst.stop()
-  #gps_scanner_inst.stop()
-  #gps_scanner_inst.close()
-  logger.close()
+class Controller:
+
+  def on_mqtt_message(self, client, userdata, msg):
+    content = json.loads(msg.payload)
+    if 'publishAd' in content:
+      if content['publishAd']:
+        src.utils.monitor.show_quality(src.utils.colors.Colors.GREEN)
+      else:
+        src.utils.monitor.show_quality(src.utils.colors.Colors.RED)
+
+  def scan(self, log_file):
+    mqtt_interface = src.utils.mqtt_interface.MqttInterface()
+    mqtt_interface.connect(self.on_mqtt_message)
+    mqtt_interface.publish('cart/cartId/test', 'hello mqtt pi')
+    # mqtt_interface.publish(topic='cart/cartId/test', payload = 'hello mqtt pi')
+    training_logger = src.utils.logger.Logger(run_name = log_file + '_training',
+        log_to_mqtt_file = False, mqtt_interface = mqtt_interface, log_to_mqtt = False,
+        log_to_stdout = False, log_to_txt_files = True)  
+    #thresholds = src.wheel_scanner.trainer.train_cart(training_logger)
+    #thresholds = [{'top_threshold': 2.56648, 'bottom_threshold': 2.15752}, {'top_threshold': 2.5726299999999998, 'bottom_threshold': 2.1522099999999997}]
+    #thresholds = [{'top_threshold': 2.7380649999999997, 'bottom_threshold': 2.3073550000000003}, {'top_threshold': 2.636935, 'bottom_threshold': 2.185645}]
+    thresholds = [{'top_threshold': 2.69, 'bottom_threshold': 2.23},
+         {'top_threshold': 2.61, 'bottom_threshold': 2.16}]
+    print thresholds
+     
+    logger = src.utils.logger.Logger(run_name = log_file, log_to_mqtt_file = True,
+        mqtt_interface = mqtt_interface, log_to_mqtt = True, log_to_stdout = False,
+        log_to_txt_files = True)  
+    #gps_scanner_inst = gps_scanner.GpsScanner()
+    ble_scanner_inst = ble_scanner.BleScanner()
+    # sensehat_scanner_inst = sensehat_scanner.SensehatScanner()
+    wheel_scanner_inst = wheel_scanner.WheelScanner(thresholds)
+    #gps_scanner_inst.open()
+    #gps_scanner_inst.start(logger)
+    ble_scanner_inst.start(logger)
+    wheel_scanner_inst.start(logger)
+    time.sleep(3600)
+    wheel_scanner_inst.stop()
+    # sensehat_scanner_inst.stop()
+    ble_scanner_inst.stop()
+    #gps_scanner_inst.stop()
+    #gps_scanner_inst.close()
+    logger.close()
 
 def main(argv):
   src.utils.monitor.init()
@@ -71,7 +82,8 @@ def main(argv):
       sys.exit()
     elif opt in ("-o", "--ofile"):
       log_file = arg
-  scan(log_file)
+  controller = Controller()
+  controller.scan(log_file)
 
 if __name__ == '__main__':
     main(sys.argv[1:])
