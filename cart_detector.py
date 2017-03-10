@@ -7,10 +7,13 @@ This module is responsible for
   4. Starting and stopping the different scanners.
 
 """
+import sys
+
+sys.path.append('/usr/local/lib/python2.7/site-packages/')
 
 import getopt
 import json
-import sys
+
 from threading import Timer
 import time
 
@@ -18,6 +21,10 @@ from src.ble import ble_scanner
 from src.gps import gps_scanner
 from src.sensehat import sensehat_scanner
 from src.wheel_scanner import wheel_scanner
+
+from picamera.array import PiRGBArray
+from picamera import PiCamera
+import cv2
 
 import src.utils.logger
 import src.utils.monitor
@@ -27,12 +34,27 @@ import src.wheel_scanner.trainer
 class Controller:
 
   def on_mqtt_message(self, client, userdata, msg):
+    print ('msg', msg)
     content = json.loads(msg.payload)
     if 'publishAd' in content:
       if content['publishAd']:
         src.utils.monitor.show_quality(src.utils.colors.Colors.GREEN)
       else:
         src.utils.monitor.show_quality(src.utils.colors.Colors.RED)
+    if 'captureImageWithCart' in content:
+      # TODO(oded): handle this.
+      print ('image_name', content['image_name']);
+      camera = PiCamera()
+      rawCapture = PiRGBArray(camera)
+      # allow the camera to warmup
+      time.sleep(0.1)
+      camera.capture(rawCapture, format="bgr")
+      image = rawCapture.array
+      cv2.imwrite('bla.png', image)
+    if 'changeThreshold' in content:
+      # TODO(oded): handle this.
+      print ('mac', content['mac']);
+      print ('threshold', content['threshold']);  
 
   def scan(self, log_file):
     mqtt_interface = src.utils.mqtt_interface.MqttInterface()
