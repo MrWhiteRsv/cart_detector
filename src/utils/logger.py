@@ -33,6 +33,7 @@ class Logger():
     self.do_log_to_mqtt = log_to_mqtt
     self.do_log_to_stdout = log_to_stdout
     dir = os.path.dirname(__file__)
+    print ('JJJ0', log_to_stdout, self.do_log_to_stdout)
     
   def close(self):
     self.mqtt_log_file.close()
@@ -62,15 +63,19 @@ class Logger():
     key_val = dict(mac = mac, start_time = start_time, end_time = end_time,
         nearest_time = nearest_time, nearest_rssi = nearest_rssi)   
     topic = "cart/cartId/ble"
-    print('log_ble_event: ' , mac)
+    self.log_event(topic, key_val)
+    
+  def log_heading_event(self, start_time, heading):
+    key_val = dict(heading = heading, start_time = start_time)   
+    topic = "cart/cartId/heading"
     self.log_event(topic, key_val)
             
   def log_ble_raw(self, mac, time_sec, rssi):
     key_val = dict(mac = mac, time_sec = time_sec, rssi = rssi)
     topic = "cart/cartId/raw_ble"
-    self.log_event(topic, key_val, bypass_mqtt = True)
+    self.log_event(topic, key_val, log_to_mqtt = False)
 
-  def log_gyro(self, start_time, yaw, pitch, roll):
+  """ def log_gyro(self, start_time, yaw, pitch, roll):
     key_val = dict(start_time = start_time, yaw = yaw, pitch = pitch, roll = roll)
     topic = "cart/cartId/gyro"
     self.log_event(topic, key_val)
@@ -78,7 +83,7 @@ class Logger():
   def log_gyro_raw(self, start_time, yaw, pitch, roll):
     key_val = dict(start_time = start_time, yaw = yaw, pitch = pitch, roll = roll)
     topic = "cart/cartId/raw_gyro"
-    self.log_event(topic, key_val, bypass_mqtt = True)
+    self.log_event(topic, key_val, log_to_mqtt = False) """
     
   def log_turn_event(self, start_time, forward_counter, backward_counter,
       forward_revolution):
@@ -96,34 +101,24 @@ class Logger():
     key_val = dict(start_time = start_time, val_0 = val_0, val_1 = val_1,
         reading_counter = reading_counter)
     topic = "cart/cartId/hall_reading"
-    self.log_event(topic, key_val, bypass_mqtt = True)
+    self.log_event(topic, key_val, log_to_mqtt = False)
 
 
   """ Internals. """
           
-  def log_event(self, topic, key_val, bypass_mqtt = False):
-    if not bypass_mqtt:
-      # print (topic)
+  def log_event(self, topic, key_val, log_to_mqtt = True):
+    if log_to_mqtt:
       self.log_to_mqtt(topic, json.dumps(key_val))
     key_val['topic'] = topic
     payload = json.dumps(key_val)
-    self.log_to_stdout(payload)
+    if self.do_log_to_stdout and topic != "cart/cartId/hall_reading":
+      print (payload)
     self.log_to_mqtt_file(payload)
-    
-  def log_to_stdout(self, str):
-    if not self.do_log_to_stdout:
-      return
-    print str
-      
+          
   def log_to_mqtt(self, topic, payload):
     if not self.do_log_to_mqtt:
       return
     self.mqtt_interface.publish(topic, payload)
-    #hostname = 'm13.cloudmqtt.com'
-    #auth = {'username':"oujibpyy", 'password':"-mKBDKwYQ1CC"}
-    #publish.single(topic, payload, hostname=hostname, auth=auth, port=11714)
-    # hostname = "li1109-31.members.linode.com"
-    # publish.single(topic, payload, hostname=hostname) 
     
   def log_to_mqtt_file(self, payload):
     if not self.do_log_to_mqtt_file:

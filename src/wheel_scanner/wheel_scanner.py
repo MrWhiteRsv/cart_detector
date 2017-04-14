@@ -4,12 +4,14 @@ import threading
 
 from envirophat import analog
 
+from envirophat import motion
+
 from signal_level import SignalLevel
 from revolution_counter import RevolutionCounter
 import src.utils.monitor
     
+""" class responsible for any pinorinio sampling."""
 class WheelScanner:
- 
   worker = None
   logger = None
   reading_counter = None
@@ -19,6 +21,10 @@ class WheelScanner:
   sensor_1_top_threshold = 5
   sensor_0_buffer = None
   sensor_1_buffer = None
+  last_heading_sample_time = None
+  heading_samples_counter = None
+  accumelated_heading_sum = None
+  sec_between_heading_loggings = 1
   
   def __init__(self, thresholds):
     if thresholds:  
@@ -26,6 +32,9 @@ class WheelScanner:
       self.sensor_0_top_threshold = thresholds[0]['top_threshold']
       self.sensor_1_bottom_threshold = thresholds[1]['bottom_threshold']
       self.sensor_1_top_threshold = thresholds[1]['top_threshold']
+      self.last_heading_sample_time = time.time()
+      self.heading_samples_counter = 0
+      self.accumelated_heading_sum = 0
     
   def get_sensor_0_buffer(self):
     return self.sensor_0_buffer
@@ -70,7 +79,15 @@ class WheelScanner:
       if self.logger:
         self.logger.log_hall_reading(time.time(), sensor_0_val, sensor_1_val,
             self.reading_counter)
-      
+      if self.logger:
+        if ((time.time() - self.last_heading_sample_time) > self.sec_between_heading_loggings) and self.heading_samples_counter > 0:
+          self.logger.log_heading_event(start_time = time.time(), heading = (self.accumelated_heading_sum / self.heading_samples_counter))
+          self.last_heading_sample_time = time.time()
+          self.heading_samples_counter = 0
+          self.accumelated_heading_sum = 0
+        else:
+          self.heading_samples_counter += 1
+          self.accumelated_heading_sum += motion.heading()
       sensor_0_level = self.compute_signal_level(sensor_0_level,
           sensor_0_val, self.sensor_0_bottom_threshold, self.sensor_0_top_threshold)
       sensor_1_level = self.compute_signal_level(sensor_1_level,
