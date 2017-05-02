@@ -33,6 +33,8 @@ import src.wheel_scanner.trainer
 
 class Controller:
 
+  ble_scanner_inst = None
+
   def on_mqtt_message(self, client, userdata, msg):
     content = json.loads(msg.payload)
     if 'publishAd' in content:
@@ -53,7 +55,10 @@ class Controller:
     if 'changeThreshold' in content:
       # TODO(oded): handle this.
       print ('mac', content['mac']);
-      print ('threshold', content['threshold']);  
+      print ('nearbyThreshold', content['nearbyThreshold']);
+      print ('awayThreshold', content['awayThreshold']);
+      self.ble_scanner_inst.set_mac_thrsholds(content['mac'], content['nearbyThreshold'],
+          content['awayThreshold'])
 
   def scan(self, log_file):
     mqtt_interface = src.utils.mqtt_interface.MqttInterface()
@@ -68,20 +73,20 @@ class Controller:
          {'top_threshold': 2.61, 'bottom_threshold': 2.16}]
     print thresholds     
     logger = src.utils.logger.Logger(run_name = log_file, log_to_mqtt_file = True,
-        mqtt_interface = mqtt_interface, log_to_mqtt = True, log_to_stdout = True,
+        mqtt_interface = mqtt_interface, log_to_mqtt = True, log_to_stdout = False,
         log_to_txt_files = True)  
     #gps_scanner_inst = gps_scanner.GpsScanner()
-    ble_scanner_inst = ble_scanner.BleScanner()
+    self.ble_scanner_inst = ble_scanner.BleScanner()
     # sensehat_scanner_inst = sensehat_scanner.SensehatScanner()
     wheel_scanner_inst = wheel_scanner.WheelScanner(thresholds)
     #gps_scanner_inst.open()
     #gps_scanner_inst.start(logger)
-    ble_scanner_inst.start(logger)
+    self.ble_scanner_inst.start(logger)
     wheel_scanner_inst.start(logger)
     time.sleep(3600)
     wheel_scanner_inst.stop()
     # sensehat_scanner_inst.stop()
-    ble_scanner_inst.stop()
+    self.ble_scanner_inst.stop()
     #gps_scanner_inst.stop()
     #gps_scanner_inst.close()
     logger.close()
@@ -105,4 +110,7 @@ def main(argv):
 
 if __name__ == '__main__':
     main(sys.argv[1:])
+
+
+
 

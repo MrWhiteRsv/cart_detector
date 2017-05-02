@@ -33,7 +33,6 @@ class Logger():
     self.do_log_to_mqtt = log_to_mqtt
     self.do_log_to_stdout = log_to_stdout
     dir = os.path.dirname(__file__)
-    print ('JJJ0', log_to_stdout, self.do_log_to_stdout)
     
   def close(self):
     self.mqtt_log_file.close()
@@ -113,9 +112,11 @@ class Logger():
     payload = json.dumps(key_val)
     if self.do_log_to_stdout and topic != "cart/cartId/hall_reading":
       print (payload)
-    self.log_to_mqtt_file(payload)
+    if topic != "cart/cartId/hall_reading":
+      self.log_to_mqtt_file(payload)
           
   def log_to_mqtt(self, topic, payload):
+    print ("Payload: " + payload)
     if not self.do_log_to_mqtt:
       return
     self.mqtt_interface.publish(topic, payload)
