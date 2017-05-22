@@ -32,7 +32,6 @@ import src.utils.mqtt_interface
 import src.wheel_scanner.trainer
 
 class Controller:
-
   ble_scanner_inst = None
   picture_counter = 0
   camera = None
