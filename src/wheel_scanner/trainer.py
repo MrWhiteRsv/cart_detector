@@ -38,13 +38,12 @@ def train_cart(logger):
     wheel_scanner_inst.stop()
     signal_0 = wheel_scanner_inst.get_sensor_0_buffer()
     signal_1 = wheel_scanner_inst.get_sensor_1_buffer()
-    if logger != None:
+    """if logger != None:
         logger.get_hall_signal_0_logger().log_raw_signal_lst(signal_0)
-        logger.get_hall_signal_1_logger().log_raw_signal_lst(signal_1)
+        logger.get_hall_signal_1_logger().log_raw_signal_lst(signal_1)"""
     thresholds[0] = turn_threshold_optimizer.optimize_thresholds(signal_0)
     thresholds[1] = turn_threshold_optimizer.optimize_thresholds(signal_1)
-    evaluate_quality(signal_0, signal_1, thresholds, logger)
-        
+    evaluate_quality(signal_0, signal_1, thresholds, logger)   
     if True: # TODO(oded): halt only if quality is ok.
       monitor.show_beacon_off()
       monitor.clear_direction()
@@ -67,7 +66,7 @@ def evaluate_quality(signal_0, signal_1, thresholds, logger):
   print('evaluation1:', evaluation_1)
   
 def wait_for_start():
-  start_training_beacon = '34:b1:f7:d3:91:f8'
+  start_training_beacon = '34:b1:f7:d3:9e:41'
   scanner = Scanner()
   continue_scan = True
   while continue_scan:

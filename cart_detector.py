@@ -34,6 +34,8 @@ import src.wheel_scanner.trainer
 class Controller:
 
   ble_scanner_inst = None
+  picture_counter = 0
+  camera = None
 
   def on_mqtt_message(self, client, userdata, msg):
     content = json.loads(msg.payload)
@@ -43,15 +45,13 @@ class Controller:
       else:
         src.utils.monitor.show_quality(src.utils.colors.Colors.RED)
     if 'captureImageWithCart' in content:
-      # TODO(oded): handle this.
       print ('image_name', content['image_name']);
-      camera = PiCamera()
-      rawCapture = PiRGBArray(camera)
-      # allow the camera to warmup
-      time.sleep(0.1)
-      camera.capture(rawCapture, format="bgr")
+      rawCapture = PiRGBArray(self.camera)
+
+      self.camera.capture(rawCapture, format="bgr")
       image = rawCapture.array
-      cv2.imwrite('bla.png', image)
+      cv2.imwrite('pic_' + str(self.picture_counter) + '.png', image)
+      self.picture_counter += 1
     if 'changeThreshold' in content:
       # TODO(oded): handle this.
       print ('mac', content['mac']);
@@ -61,17 +61,24 @@ class Controller:
           content['awayThreshold'])
 
   def scan(self, log_file):
+  
+    self.camera = PiCamera()
+    # allow the camera to warmup
+    time.sleep(0.1)
+  
     mqtt_interface = src.utils.mqtt_interface.MqttInterface()
     mqtt_interface.connect(self.on_mqtt_message)
     mqtt_interface.publish('cart/cartId/test', 'hello mqtt pi')
-    # mqtt_interface.publish(topic='cart/cartId/test', payload = 'hello mqtt pi')
     training_logger = src.utils.logger.Logger(run_name = log_file + '_training',
         log_to_mqtt_file = False, mqtt_interface = mqtt_interface, log_to_mqtt = False,
         log_to_stdout = True, log_to_txt_files = False)  
-    #thresholds = src.wheel_scanner.trainer.train_cart(training_logger)
-    thresholds = [{'top_threshold': 2.69, 'bottom_threshold': 2.23},
-         {'top_threshold': 2.61, 'bottom_threshold': 2.16}]
-    print thresholds     
+    thresholds = src.wheel_scanner.trainer.train_cart(training_logger)
+    #thresholds = [{'top_threshold': 2.69, 'bottom_threshold': 2.23},
+    #     {'top_threshold': 2.61, 'bottom_threshold': 2.16}]
+    #thresholds = [{'top_threshold': 3.11, 'bottom_threshold': 2.78},
+    #     {'top_threshold': 3.11, 'bottom_threshold': 2.78}]
+    print thresholds  
+    #return   
     logger = src.utils.logger.Logger(run_name = log_file, log_to_mqtt_file = True,
         mqtt_interface = mqtt_interface, log_to_mqtt = True, log_to_stdout = False,
         log_to_txt_files = True)  

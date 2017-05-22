@@ -92,6 +92,7 @@ class WheelScanner:
           sensor_0_val, self.sensor_0_bottom_threshold, self.sensor_0_top_threshold)
       sensor_1_level = self.compute_signal_level(sensor_1_level,
           sensor_1_val, self.sensor_1_bottom_threshold, self.sensor_1_top_threshold)
+      print ('sensor_1_level', sensor_1_level, 'sensor_1_val', sensor_1_val, self.sensor_1_bottom_threshold, self.sensor_1_top_threshold)
       rev_counter_res = rev_counter.add_reading(sensor_0_level, sensor_1_level)
       forward_counter = rev_counter_res['forward_revolutions_counter']
       backward_counter = rev_counter_res['backward_revolutions_counter']

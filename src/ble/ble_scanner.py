@@ -25,7 +25,7 @@ class BleScanner:
     
   def init_thresholds(self):
     all_macs = ['34:b1:f7:d3:90:ff', '34:b1:f7:d3:9c:cb', '34:b1:f7:d3:9d:2f',
-        '34:b1:f7:d3:9d:eb', '34:b1:f7:d3:9c:a3','34:b1:f7:d3:9d:f6']
+        '34:b1:f7:d3:9e:41', '34:b1:f7:d3:9c:a3','34:b1:f7:d3:9d:f6']
     self.map_mac_to_nearest_rssi = dict()
     self.map_mac_to_away_rssi = dict()
     for mac in all_macs:
@@ -40,7 +40,7 @@ class BleScanner:
         '34:b1:f7:d3:90:ff' : Colors.RED,
         '34:b1:f7:d3:9c:cb' : Colors.GREEN,
         '34:b1:f7:d3:9d:2f' : Colors.BLUE,
-        '34:b1:f7:d3:9d:eb' : Colors.YELLOW,
+        '34:b1:f7:d3:9e:41' : Colors.YELLOW,
         '34:b1:f7:d3:9c:a3' : Colors.PURPLE,
         '34:b1:f7:d3:9d:f6' : Colors.ORANGE,
     }.get(mac, (255, 255, 255))
@@ -51,10 +51,14 @@ class BleScanner:
     supermetric_beacons['34:b1:f7:d3:90:ff'] = self.create_beacon_state()
     supermetric_beacons['34:b1:f7:d3:9c:cb'] = self.create_beacon_state()
     supermetric_beacons['34:b1:f7:d3:9d:2f'] = self.create_beacon_state()
-    supermetric_beacons['34:b1:f7:d3:9d:eb'] = self.create_beacon_state()
+    supermetric_beacons['34:b1:f7:d3:9e:41'] = self.create_beacon_state()
     supermetric_beacons['34:b1:f7:d3:9c:a3'] = self.create_beacon_state()
     supermetric_beacons['34:b1:f7:d3:9d:f6'] = self.create_beacon_state()
     scanner = Scanner()
+
+# 34:b1:f7:d3:9e:41
+# 34:b1:f7:d3:92:3f
+# 34:b1:f7:d3:91:55
 
     while True:
       if (not getattr(self.worker, "do_run", True)):
@@ -63,11 +67,12 @@ class BleScanner:
         fields = beacon.split(",")
         mac = fields[0]
         # print ('ble, mac: ', mac, ', rssi: ', int(fields[5]))
+        
         if mac in supermetric_beacons:
           time_sec = time.time()
           rssi = int(fields[5])
           
-          print (rssi, self.map_mac_to_nearest_rssi[mac], self.map_mac_to_away_rssi[mac])
+          # print (rssi, self.map_mac_to_nearest_rssi[mac], self.map_mac_to_away_rssi[mac])
           
           self.logger.log_ble_raw(mac, time_sec, rssi)
           if rssi > supermetric_beacons[mac]['nearest_rssi']:
