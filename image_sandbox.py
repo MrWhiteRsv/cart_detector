@@ -49,7 +49,6 @@ class Controller:
 	  	self.image_scanner_inst.stop()
       elif content['command'] == 'set_name':
 	  	self.image_scanner_inst.set_name(content['var'])
-	  	self.publish_log('life is good!')
       else:
         print 'command: ' + content['command'] + ' not supported.' 
         
