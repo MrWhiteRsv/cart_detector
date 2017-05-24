@@ -18,11 +18,10 @@ from threading import Timer
 import time
 
 import src.utils.logger
-import src.utils.monitor
 import src.utils.mqtt_interface
 
-from src.gps import gps_scanner
 from src.vision import image_scanner
+from src.vision import image_comperator
 
 class Controller:
 
@@ -44,11 +43,11 @@ class Controller:
       if content['command'] == 'snap':
         self.image_scanner_inst.snap()
       elif content['command'] == 'start_capture':
- 		self.image_scanner_inst.start()
+        self.image_scanner_inst.start()
       elif content['command'] == 'stop_capture':
-	  	self.image_scanner_inst.stop()
+        self.image_scanner_inst.stop()
       elif content['command'] == 'set_name':
-	  	self.image_scanner_inst.set_name(content['var'])
+        self.image_scanner_inst.set_name(content['var'])
       else:
         print 'command: ' + content['command'] + ' not supported.' 
         
@@ -60,12 +59,10 @@ class Controller:
         log_to_txt_files = True)  
     self.image_scanner_inst = image_scanner.ImageScanner()
     self.image_scanner_inst.init(logger, 'pic', self)
-    
     time.sleep(3600)
     logger.close()
 
 def main(argv):
-  src.utils.monitor.init()
   log_file = ''
   try:
     opts, args = getopt.getopt(argv,"hi:o:",["ifile=","ofile="])
@@ -78,11 +75,16 @@ def main(argv):
       sys.exit()
     elif opt in ("-o", "--ofile"):
       log_file = arg
-  controller = Controller()
-  controller.scan(log_file)
+  if False: 
+    controller = Controller()
+    controller.scan(log_file)
+  else:
+    comperator = image_comperator.ImageComperator()
+    comperator.compare('jjj_2.png', 'b_5.png')
+  
 
 if __name__ == '__main__':
-    main(sys.argv[1:])
+  main(sys.argv[1:])
 
 
 
